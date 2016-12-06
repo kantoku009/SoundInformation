@@ -578,7 +578,7 @@ long CWaveFormatOperator::convert4ByteDataToLong(char* i_pbyData)
 void CWaveFormatOperator::convertLongTo4ByteData(long i_lInteger, char* i_pbyData)
 {
 	bool a_bIsBigEndian = this->isBigEndian();
-	if(a_bIsBigEndian) i_lInteger = this->swapShort((char*)&i_lInteger);
+	if(a_bIsBigEndian) i_lInteger = this->swapLong((char*)&i_lInteger);
 
 	memcpy(i_pbyData, (char*)&i_lInteger, 4);
 }
