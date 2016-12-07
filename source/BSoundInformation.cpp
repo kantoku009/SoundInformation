@@ -288,7 +288,7 @@ void BSoundInformation::setSamplesPerChannel(long samplesPerChannel)
 ****************************************************************************************/
 short BSoundInformation::getBytesPerSample() const 
 {
-	unsigned short bytesPerSample;
+	short bytesPerSample;
 	
 	bytesPerSample = this->m_shBitsPerSample/8 + (this->m_shBitsPerSample%8 != 0);
 	bytesPerSample = (bytesPerSample < static_cast<short>(sizeof(long)) )? bytesPerSample:sizeof(long);
