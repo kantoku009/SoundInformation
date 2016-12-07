@@ -1,7 +1,7 @@
 #include "BSoundInformation.h"
 
 #include <iostream>
-#include <cstring>
+#include <cstring>		//memsetを使用したい.
 using namespace std;
 
 /*******************************************************************
@@ -291,7 +291,7 @@ short BSoundInformation::getBytesPerSample() const
 	unsigned short bytesPerSample;
 	
 	bytesPerSample = this->m_shBitsPerSample/8 + (this->m_shBitsPerSample%8 != 0);
-	bytesPerSample = (bytesPerSample < sizeof(long))? bytesPerSample:sizeof(long);
+	bytesPerSample = (bytesPerSample < static_cast<short>(sizeof(long)) )? bytesPerSample:sizeof(long);
 	
 	return bytesPerSample;
 }
