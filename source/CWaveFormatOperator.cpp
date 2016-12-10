@@ -187,7 +187,7 @@ bool CWaveFormatOperator::readSample8FromFile(ifstream& i_cFileStream)
 			char data = 0;
 			i_cFileStream.read((char*)&data,sizeof(char));
 			data ^= 0x80;
-			this->writeSampleIntoMemory((double)data/max, index, channel);
+			this->setSample((double)data/max, index, channel);
 		}
 	}
 
@@ -210,7 +210,7 @@ bool CWaveFormatOperator::readSample16FromFile(ifstream& i_cFileStream)
 			short data = 0;
 			i_cFileStream.read((char*)&data, sizeof(short));
 			if(bigEndian) this->swapShort((char*)&data);
-			this->writeSampleIntoMemory((double)data/max, index, channel);
+			this->setSample((double)data/max, index, channel);
 		}
 	}
 
@@ -234,7 +234,7 @@ bool CWaveFormatOperator::readSampleOtherFromFile(ifstream& i_cFileStream)
 			long data = 0;
 			i_cFileStream.read((char*)&data,(long)bytesPerSample);
 			if(bigEndian) this->swapLong((char*)&data);
-			this->writeSampleIntoMemory((double)data/max, index, channel);
+			this->setSample((double)data/max, index, channel);
 		}
 	}
 
@@ -413,7 +413,7 @@ bool CWaveFormatOperator::writeSample8IntoFile(ofstream& i_cFileStream)
 		for(short channel=0;channel<this->getNumChannels();channel++)
 		{
 			char data = 0;
-			data = max * readSampleFromMemory(index,channel);
+			data = max * getSample(index,channel);
 			data ^= 0x80;
 			i_cFileStream.write((char*)&data, sizeof(char));
 		}
@@ -436,7 +436,7 @@ bool CWaveFormatOperator::writeSample16IntoFile(ofstream& i_cFileStream)
 		for(short channel=0;channel<this->getNumChannels();channel++)
 		{
 			short data = 0;
-			data = max * this->readSampleFromMemory(index,channel);
+			data = max * this->getSample(index,channel);
 			if(bigEndian) data = this->swapShort((char*)&data);
 			i_cFileStream.write((char*)&data, sizeof(short));
 		}
@@ -460,7 +460,7 @@ bool CWaveFormatOperator::writeSampleOtherIntoFile(ofstream& i_cFileStream)
 		for(short channel=0;channel<this->getNumChannels();channel++)
 		{
 			long data = 0;
-			data = max * this->readSampleFromMemory(index,channel);
+			data = max * this->getSample(index,channel);
 			if(bigEndian) data = this->swapLong((char*)&data);
 			i_cFileStream.write((char*)&data, bytesPerSample);
 		}

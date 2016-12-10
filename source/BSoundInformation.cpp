@@ -111,7 +111,7 @@ void BSoundInformation::setSampleRate(long sampleRate)
 		for(long index=0;index<this->getSamplesPerChannel();index++)
 		{
 			data = temp.interpolation(index*delta, channel);
-			this->writeSampleIntoMemory(data, index, channel);
+			this->setSample(data, index, channel);
 		}
 	}
 
@@ -202,8 +202,8 @@ void BSoundInformation::setNumChannels(short numChannels)
 	{
 		for(short channel=0;channel<lessChannel;channel++)
 		{
-			data = temp.readSampleFromMemory(index,channel);
-			this->writeSampleIntoMemory(data,index,channel);
+			data = temp.getSample(index,channel);
+			this->setSample(data,index,channel);
 		}
 	}
 }
@@ -298,7 +298,7 @@ short BSoundInformation::getBytesPerSample() const
 
 
 /****************************************************************************************
-*readSampleFromMemory : メモリからサンプル値を取得
+*getSample : メモリからサンプル値を取得
 *
 *引数
 *	num : 取得するサンプルが最初から何番目のものかを指定
@@ -315,7 +315,7 @@ short BSoundInformation::getBytesPerSample() const
 *	indexが全サンプル数より大きければ0を返す
 *
 ****************************************************************************************/
-double BSoundInformation::readSampleFromMemory(long num,short channel)  const
+double BSoundInformation::getSample(long num,short channel)  const
 {
 	
 	short numChan = this->getNumChannels();
@@ -332,7 +332,7 @@ double BSoundInformation::readSampleFromMemory(long num,short channel)  const
 
 
 /****************************************************************************************
-*writeSampleIntoMemory : メモリにサンプル値を書き込む
+*setSample : メモリにサンプル値を書き込む
 *
 *引数
 *	sample : 書き込むサンプル値
@@ -350,7 +350,7 @@ double BSoundInformation::readSampleFromMemory(long num,short channel)  const
 *	indexが全サンプル数より大きければ書き込まない
 *
 ****************************************************************************************/
-void BSoundInformation::writeSampleIntoMemory(double sample,long num,short channel)
+void BSoundInformation::setSample(double sample,long num,short channel)
 {
 	short numChan = this->getNumChannels();
 	long index = numChan*num + channel;
@@ -459,8 +459,8 @@ BSoundInformation BSoundInformation::operator+(const BSoundInformation &ob)
 		{
 			double data;
 			
-			data = this->readSampleFromMemory(index,chan) + ob.readSampleFromMemory(index,chan);
-			temp.writeSampleIntoMemory(data,index,chan);
+			data = this->getSample(index,chan) + ob.getSample(index,chan);
+			temp.setSample(data,index,chan);
 		}
 	}
 	
@@ -528,8 +528,8 @@ const BSoundInformation &BSoundInformation::operator+=(BSoundInformation &ob)
 		{
 			double data;
 			
-			data = this->readSampleFromMemory(index,chan) + ob.readSampleFromMemory(index,chan);
-			this->writeSampleIntoMemory(data,index,chan);
+			data = this->getSample(index,chan) + ob.getSample(index,chan);
+			this->setSample(data,index,chan);
 		}
 	}
 
@@ -598,7 +598,7 @@ double BSoundInformation::interpolation(double i_dThreshold, short i_shChannel)
 	{
 		if( ((i_dThreshold+a_iIndex) >= 0) && ((i_dThreshold+a_iIndex) < this->getSamplesPerChannel()) )
 		{
-			a_dInterpolation+= this->readSampleFromMemory(a_lThresholdInteger+a_iIndex, i_shChannel)*sinc(i_dThreshold-(a_lThresholdInteger+a_iIndex));
+			a_dInterpolation+= this->getSample(a_lThresholdInteger+a_iIndex, i_shChannel)*sinc(i_dThreshold-(a_lThresholdInteger+a_iIndex));
 		}
 	}
 

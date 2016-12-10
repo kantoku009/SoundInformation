@@ -129,7 +129,7 @@ public:
 	 * @param	short channel
 	 * @return	なし.
 	 */
-	void	writeSampleIntoMemory(double sample, long num, short channel=0);
+	void	setSample(double sample, long num, short channel=0);
 
 	/**
 	 * @brief	メモリからサンプル値を読みこむ.
@@ -137,7 +137,7 @@ public:
 	 * @param	short channel
 	 * @return	サンプル値.
 	 */
-	double	readSampleFromMemory(long num, short channel=0) const;
+	double	getSample(long num, short channel=0) const;
     
 	/**
 	 * @brief	=演算子のオーバーロード.
