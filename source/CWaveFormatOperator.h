@@ -105,27 +105,6 @@ private:
 	bool readSample(ifstream& i_cFileStream, TChunk& i_stChunk);
 
 	/**
-	 * @brief	8bitで量子化されたファイルを読みこむ.
-	 * @param	ifstream& i_cFileStream	読み込みファイルストリーム.
-	 * @return	成功/失敗.
-	 */
-	bool readSample8FromFile(ifstream& i_cFileStream);
-
-	/**
-	 * @brief	16bitで量子化されたファイルを読みこむ.
-	 * @param	ifstream& i_cFileStream	読み込みファイルストリーム.
-	 * @return	成功/失敗.
-	 */
-	bool readSample16FromFile(ifstream& i_cFileStream);
-
-	/**
-	 * @brief	8bit,16bit以外で量子化されたファイルを読みこむ.
-	 * @param	ifstream& i_cFileStream	読み込みファイルストリーム.
-	 * @return	成功/失敗.
-	 */
-	bool readSampleOtherFromFile(ifstream& i_cFileStream);
-
-	/**
 	 * @brief	RIFF chunkをWAVEファイルへ書き込み.
 	 * @param	ofstream& i_cFileStream	書き込みファイルストリーム.
 	 * @return	成功/失敗.
@@ -152,92 +131,6 @@ private:
 	 * @return	成功/失敗.
 	 */
 	bool writeSample(ofstream& i_cFileStream);
-
-	/**
-	 * @brief	8bitで量子化されたファイルを書き込む.
-	 * @param	ofstream& i_cFileStream	書き込みファイルストリーム.
-	 * @return	成功/失敗.
-	 */
-	bool writeSample8IntoFile(ofstream& i_cFileStream);
-
-	/**
-	 * @brief	16bitで量子化されたファイルを書き込む.
-	 * @param	ofstream& i_cFileStream	書き込みファイルストリーム.
-	 * @return	成功/失敗.
-	 */
-	bool writeSample16IntoFile(ofstream& i_cFileStream);
-
-	/**
-	 * @brief	8bit,16bit以外で量子化されたファイルを書き込む.
-	 * @param	ofstream&	i_cFileStream	書き込みファイルストリーム.
-	 * @return	成功/失敗.
-	 */
-	bool writeSampleOtherIntoFile(ofstream& i_cFileStream);
-
-	/**
-	 * @brief	bit shiftをする.
-	 * @param	short i_shBitShift
-	 * @return	bit shiftした結果.
-	 */
-	long bitShift(short i_shNumShift);
-    
-	/**
-	 * @brief	Big-endianか否かを調べる.
-	 * @param	なし.
-	 * @return	true:Big-endian / false:Little-endian
-	 */
-	bool isBigEndian();
-    
-	/**
-	 * @brief	long型 Little-endian -> Big-endian を変換する.
-	 * @param	変換するデータ.
-	 * @return	変換した結果.
-	 */
-	long swapLong(char* i_pbyData);
-
-	/**
-	 * @brief	short型 Little-endian -> Big-endian を変換する.
-	 * @param	変換するデータ.
-	 * @return	変換した結果.
-	 */
-	short swapShort(char* i_pbyData);
-
-	/**
-	 * @brief	int型 Little-endian -> Big-endian を変換する.
-	 * @param	変換するデータ.
-	 * @return	変換した結果.
-	 */
-	int swapInt(char* i_pbyData);
-
-	/**
-	 * @brief	4ByteDataをlong型に変換する.
-	 * @param	char* data
-	 * @return	変換した数値.
-	 */
-	long convert4ByteDataToLong(char* data);
-
-	/**
-	 * @brief	long型を4ByteDataに変換する.
-	 * @param	long i_lInteger
-	 * @param	char* i_pbyData out引数.
-	 * @return	なし.
-	 */
-	void convertLongTo4ByteData(long i_lInteger, char* i_pbyData);
-
-	/**
-	 * @brief	2ByteDataをshort型に変換する.
-	 * @param	char* data
-	 * @return	変換した数値.
-	 */
-	short convert2ByteDataToShort(char* data);
-
-	/**
-	 * @brief	short型を2ByteDataに変換する.
-	 * @param	short i_shInteger
-	 * @param	char* i_pbyData out引数.
-	 * @return	なし.
-	 */
-	void convertShortTo2ByteData(short i_shInteger, char* i_pbyData);
 
 	/**
 	 * @brief	TChunkを表示.
