@@ -15,7 +15,7 @@ GitHubのリポジトリと全ソースコードのダウンロードは以下UR
 クラス図とシーケンス図を作成した。  
 以下からダウンロード可能。  
 
- - [UML](https://github.com/kantoku009/SoundInformation/blob/master/UML/SoundInformation.asta?raw=true)
+ - [UML](https://github.com/kantoku009/SoundInformation/blob/master/document/UML.asta?raw=true)
 
 UMLの作成には無償のUMLモデリングツール[astah community](http://astah.change-vision.com/ja/)を使用している。  
 
