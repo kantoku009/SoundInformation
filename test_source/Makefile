@@ -3,8 +3,8 @@ LIBS =
 LDFLAGS = -Wall -O2
 
 #SRCS_WAVEFORMAT_OPERATOR
-SRCS_WAVEFORMAT_OPERATOR_DIR := ..
-include ../Makefile
+SRCS_WAVEFORMAT_OPERATOR_DIR := ../source
+include ../source/Makefile
 
 #Test code SRC
 SRCS_TEST_WAVEFORMAT_OPERATOR = ./test_WaveFormatOperator.cpp

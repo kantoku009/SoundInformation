@@ -1,4 +1,4 @@
-#include "../CWaveFormatOperator.h"
+#include "../source/CWaveFormatOperator.h"
 
 #include <iostream>
 using namespace std;
@@ -13,7 +13,7 @@ int main(int argc, char* argv[])
 	if(a_bIsSuccess)
 	{
 		cout << "--- Read file now ---" << endl;
-		a_bIsSuccess = waveFile.readWaveFile(inFileName);
+		a_bIsSuccess = waveFile.read(inFileName);
 	}
 	if(false == a_bIsSuccess)
 	{
@@ -26,7 +26,7 @@ int main(int argc, char* argv[])
     if(a_bIsSuccess)
 	{
         cout << "--- Write file now ---" << endl;
-        a_bIsSuccess = waveFile.writeWaveFile("out.wav");
+        a_bIsSuccess = waveFile.write("out.wav");
     }
 	if(false == a_bIsSuccess)
 	{

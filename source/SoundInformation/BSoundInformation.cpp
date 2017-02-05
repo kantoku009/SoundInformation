@@ -1,8 +1,10 @@
-#include "BSoundInformation.h"
-
 #include <iostream>
 #include <cstring>		//memsetを使用したい.
 using namespace std;
+
+#ifndef __BSOUND_INFORMATION_H__
+#include "../BSoundInformation.h"
+#endif
 
 /*******************************************************************
 *BSoundInformationのコンストラクタ

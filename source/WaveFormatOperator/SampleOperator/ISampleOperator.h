@@ -1,10 +1,11 @@
 /**
- * @file	IReadSample.h
+ * @file	ISampleOperator.h
  * @brief	WAVEファイルのサンプル値を読み込むクラス.
  */
 
-#ifndef __IREADSAMPLE_H__
-#define __IREADSAMPLE_H__
+
+#ifndef __ISAMPLEOPERATOR_H__
+#define __ISAMPLEOPERATOR_H__
 
 #include <fstream>
 using namespace std;
@@ -12,18 +13,18 @@ using namespace std;
 /**
  * @brief	WAVEファイルのサンプル値を読み込むクラス.
  */
-class IReadSample
+class ISampleOperator
 {
 public:
 	/**
 	 * @brief	コンストラクタ.
 	 */
-	IReadSample(){ }
+	ISampleOperator(){ }
 	
 	/**
 	 * @brief	デストラクタ.
 	 */
-	virtual ~IReadSample(){ }
+	virtual ~ISampleOperator(){ }
 
 	/**
 	 * @brief	WAVEファイルに書き込み.
@@ -31,7 +32,14 @@ public:
 	 * @return	成功/失敗.
 	 */
 	virtual double read(ifstream& i_cFileStream) = 0;
-
+	
+	/**
+	 * @brief	WAVEファイルに書き込み.
+	 * @param	const string i_strFileName	ファイル名.
+	 * @return	成功/失敗.
+	 */
+	virtual bool write(double i_dSample, ofstream& i_cFileStream) = 0;
+	
 protected:
 	/**
 	 * @brief	量子化ビット. [bit/sample].
@@ -39,5 +47,5 @@ protected:
 	short   m_shBitsPerSample;
 };
 
-#endif	//__IREADSAMPLE_H__
+#endif	// __ISAMPLEOPERATOR_H__
 
