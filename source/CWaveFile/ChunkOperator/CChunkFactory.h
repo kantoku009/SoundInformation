@@ -10,12 +10,12 @@
 #include <cstring>
 using namespace std;
 
-#ifndef __CWAVE_FORMAT_OPERATOR_H__
-#include "../../CWaveFormatOperator.h"
+#ifndef __CWAVEFILE_H__
+#include "../../CWaveFile.h"
 #endif
 
-#ifndef __CWAVEFORMATOPERATORUTILITY_H__
-#include "../Utility/CWaveFormatOperatorUtility.h"
+#ifndef __CWAVEFILEUTILITY_H__
+#include "../Utility/CWaveFileUtility.h"
 #endif
 
 #ifndef __BCHUNKOPERATOR_H__

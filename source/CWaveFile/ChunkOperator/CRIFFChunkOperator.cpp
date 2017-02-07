@@ -26,7 +26,7 @@ CRIFFChunkOperator::CRIFFChunkOperator()
 /**
  * RIFF chunkをファイルから読み込み.
  */
-bool  CRIFFChunkOperator::read(ifstream& i_cFileStream, CWaveFormatOperator& i_pcWaveFormatOperator, T_CHUNK& i_stChunk)
+bool  CRIFFChunkOperator::read(ifstream& i_cFileStream, CWaveFile& i_pcWaveFile, T_CHUNK& i_stChunk)
 {
 	memset((char*)&i_stChunk, 0x00, sizeof(i_stChunk));
 	
@@ -41,7 +41,7 @@ bool  CRIFFChunkOperator::read(ifstream& i_cFileStream, CWaveFormatOperator& i_p
 	}
 
 	// Chunk sizeを設定.
-	this->m_lSize = CWaveFormatOperatorUtility::convert4ByteDataToLong(i_stChunk.m_szSize);
+	this->m_lSize = CWaveFileUtility::convert4ByteDataToLong(i_stChunk.m_szSize);
 	
 	if(m_bIsDEBUG) printChunk((char*)"Read Chunk", i_stChunk);
 	return true;
@@ -50,7 +50,7 @@ bool  CRIFFChunkOperator::read(ifstream& i_cFileStream, CWaveFormatOperator& i_p
 /**
  * RIFF chunkをファイルへ書き込み.
  */
-bool CRIFFChunkOperator::write(ofstream& i_cFileStream, CWaveFormatOperator& i_pcWaveFormatOperator)
+bool CRIFFChunkOperator::write(ofstream& i_cFileStream, CWaveFile& i_pcWaveFile)
 {
 	T_CHUNK a_stChunk;
 	memset((char*)&a_stChunk, 0x00, sizeof(a_stChunk));
@@ -59,14 +59,14 @@ bool CRIFFChunkOperator::write(ofstream& i_cFileStream, CWaveFormatOperator& i_p
 	strncpy(a_stChunk.m_szID, this->m_szID, sizeof(a_stChunk.m_szID));
 
 	// Chunk Sizeを書き込む.
-	long dataSize = i_pcWaveFormatOperator.getSamplesPerChannel() * i_pcWaveFormatOperator.getBlockAlign();
+	long dataSize = i_pcWaveFile.getSamplesPerChannel() * i_pcWaveFile.getBlockAlign();
 	long lRIFFSize = 0;
 	lRIFFSize = 4						//'WAVE'
 				+ sizeof(T_CHUNK)		//'fmt '
 				+ sizeof(T_FMT_CHUNK)	//FMT Chunk
 				+ sizeof(T_CHUNK)		//'data'
 				+ dataSize;				//全サンプルのサイズ.
-	CWaveFormatOperatorUtility::convertLongTo4ByteData(lRIFFSize, a_stChunk.m_szSize);
+	CWaveFileUtility::convertLongTo4ByteData(lRIFFSize, a_stChunk.m_szSize);
 
 	// Chunkをファイルへ書き込み.
 	i_cFileStream.write((char*)&a_stChunk, sizeof(a_stChunk));

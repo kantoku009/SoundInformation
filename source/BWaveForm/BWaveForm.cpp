@@ -2,12 +2,12 @@
 #include <cstring>		//memsetを使用したい.
 using namespace std;
 
-#ifndef __BSOUND_INFORMATION_H__
-#include "../BSoundInformation.h"
+#ifndef __BWAVEFORM_H__
+#include "../BWaveForm.h"
 #endif
 
 /*******************************************************************
-*BSoundInformationのコンストラクタ
+*BWaveFormのコンストラクタ
 *
 *引数
 *	sampleRate:サンプリング周波数
@@ -25,18 +25,18 @@ using namespace std;
 *	メンバ変数の初期化
 *
 ********************************************************************/
-BSoundInformation::BSoundInformation(
-									long  sampleRate,
-									short bitsPerSample,
-									short numChannels,
-									long  samplesPerChannel)
+BWaveForm::BWaveForm(
+			long  sampleRate,
+			short bitsPerSample,
+			short numChannels,
+			long  samplesPerChannel)
 {
 	try
 	{
 		this->m_pdSample = new double [samplesPerChannel*numChannels];
 	}
 	catch(bad_alloc err){
-		cerr << "BSoundInformation error: BSoundInformation::BSoundInformation. " << err.what() << endl;
+		cerr << "BWaveForm error: BWaveForm::BWaveForm. " << err.what() << endl;
 	}
 	memset(this->m_pdSample, 0, samplesPerChannel*numChannels*sizeof(double));
 	
@@ -51,7 +51,7 @@ BSoundInformation::BSoundInformation(
 *コピーコンストラクター
 *
 **************************************************************/
-BSoundInformation::BSoundInformation(const BSoundInformation &ob)
+BWaveForm::BWaveForm(const BWaveForm &ob)
 {	
 
 	this->m_lSampleRate = ob.getSampleRate();
@@ -67,7 +67,7 @@ BSoundInformation::BSoundInformation(const BSoundInformation &ob)
 		}
 		catch(bad_alloc err)
 		{
-			cerr << "BSoundInformation::operator=. " << err.what() << endl;
+			cerr << "BWaveForm::operator=. " << err.what() << endl;
 		}
 	}
 	memcpy(this->m_pdSample, ob.m_pdSample, this->getNumSamples()*sizeof(double));
@@ -83,26 +83,26 @@ BSoundInformation::BSoundInformation(const BSoundInformation &ob)
 *	data : サンプル値の値
 *	delta : 現在のサンプリング周波数と設定したいサンプリング周波数の比(再サンプリング時に必要)
 *	samplePerChannel : サンプリング周波数を設定した後の1channelにつきのサンプル数
-*	temp : 現在のBSoundInformationを保存しておく変数
+*	temp : 現在のBWaveFormを保存しておく変数
 *
 *返り値
 *	なし
 *
 *処理の流れ
 *	現在のサンプリング周波数と設定後のサンプリング周波数が同じ値ならば何もせずにreturn
-*	tempに現在のBSoundInformationを保存
+*	tempに現在のBWaveFormを保存
 *	現在のサンプリング周波数と設定後のサンプリング周波数の比を求め、設定後のsamplePerCahnnelを設定
 *	再サンプリングの処理
 *	サンプリング周波数の設定
 *
 **************************************************************************************************/
-void BSoundInformation::setSampleRate(long sampleRate)
+void BWaveForm::setSampleRate(long sampleRate)
 {
 	double data;
 	
 	if(sampleRate == this->getSampleRate()) return;
 	
-	BSoundInformation temp = *this;
+	BWaveForm temp = *this;
 	double delta = (double)this->getSampleRate()/sampleRate;
 	
 	long samplesPerChannel = this->getSamplesPerChannel() / delta;
@@ -138,7 +138,7 @@ void BSoundInformation::setSampleRate(long sampleRate)
 *	量子化ビットを設定
 *
 **************************************************************************/
-void BSoundInformation::setBitsPerSample(short bitsPerSample)
+void BWaveForm::setBitsPerSample(short bitsPerSample)
 {
 	
 	if(bitsPerSample == this->getBitsPerSample()) return;
@@ -156,27 +156,27 @@ void BSoundInformation::setBitsPerSample(short bitsPerSample)
 *	numSamples : 全サンプル数
 *	data : サンプル値を保存する
 *	lessChannel : 設定前と設定後のどちらかの少ないほうのチャンネル数
-*	temp : 設定前のBSoundInformation
+*	temp : 設定前のBWaveForm
 *
 *返り値
 *	なし
 *
 *処理の流れ
-*	tempに現在の状態のBSoundInformationをコピー
+*	tempに現在の状態のBWaveFormをコピー
 *	設定後のチャンネル数と全サンプル数を設定
 *	dataを保持するメモリを確保
 *	設定前と設定後でチャンネル数の少ないほうを記録
 *	サンプル値のコピー
 *
 ****************************************************************************/
-void BSoundInformation::setNumChannels(short numChannels)
+void BWaveForm::setNumChannels(short numChannels)
 {
 	double data;
 	short lessChannel;
 	
 	if(numChannels == this->getNumChannels()) return;
 	
-	BSoundInformation temp = *this;
+	BWaveForm temp = *this;
 	this->m_shNumChannels = numChannels;
 	long numSamples = this->getNumSamples();
 	
@@ -187,7 +187,7 @@ void BSoundInformation::setNumChannels(short numChannels)
 	}
 	catch(bad_alloc err)
 	{
-		cerr << "BSoundInformation::setNumChannels. " << err.what() << endl;
+		cerr << "BWaveForm::setNumChannels. " << err.what() << endl;
 	}
 	memset(this->m_pdSample, 0, numSamples*sizeof(double));
 	
@@ -218,7 +218,7 @@ void BSoundInformation::setNumChannels(short numChannels)
 *	samplesPerChannel : 設定後の１チャンネルのサンプル数
 *
 *ローカル変数
-*	temp : 設定前のBSoundInformation
+*	temp : 設定前のBWaveForm
 *	oldNumSamples : 設定前の全サンプル数
 *	newNumSamples : 設定後の全サンプル数
 *	lessNumSamples : 設定前と設定後の少ない方の全サンプル数
@@ -227,19 +227,19 @@ void BSoundInformation::setNumChannels(short numChannels)
 *	なし
 *
 *処理の流れ
-*	tempに現在の状態のBSoundInformationをコピー
+*	tempに現在の状態のBWaveFormをコピー
 *	設定前の全サンプル数と設定後の全サンプル数を記憶
 *	設定前と設定後での全サンプル数の少ないほうを記憶
 *	全サンプル数、分だけメモリを確保
 *	確保したメモリにサンプル値をコピー
 *
 *************************************************************************/
-void BSoundInformation::setSamplesPerChannel(long samplesPerChannel)
+void BWaveForm::setSamplesPerChannel(long samplesPerChannel)
 {
 	
 	if(samplesPerChannel == this->getSamplesPerChannel()) return;
 	
-	BSoundInformation temp = *this;
+	BWaveForm temp = *this;
 	
 	long oldNumSamples = this->getNumSamples();
 	this->m_lSamplesPerChannel = samplesPerChannel;
@@ -261,7 +261,7 @@ void BSoundInformation::setSamplesPerChannel(long samplesPerChannel)
 	}
 	catch(bad_alloc err)
 	{
-		cerr << "BSoundInformation::setSamplesPerChannel. " << err.what() << endl;
+		cerr << "BWaveForm::setSamplesPerChannel. " << err.what() << endl;
 	}
 
 	memset(this->m_pdSample, 0, newNumSamples*sizeof(double));
@@ -288,7 +288,7 @@ void BSoundInformation::setSamplesPerChannel(long samplesPerChannel)
 *	大きければbytesPerSampleを4に設定
 *
 ****************************************************************************************/
-short BSoundInformation::getBytesPerSample() const 
+short BWaveForm::getBytesPerSample() const 
 {
 	short bytesPerSample;
 	
@@ -317,7 +317,7 @@ short BSoundInformation::getBytesPerSample() const
 *	indexが全サンプル数より大きければ0を返す
 *
 ****************************************************************************************/
-double BSoundInformation::getSample(long num,short channel)  const
+double BWaveForm::getSample(long num,short channel)  const
 {
 	
 	short numChan = this->getNumChannels();
@@ -352,7 +352,7 @@ double BSoundInformation::getSample(long num,short channel)  const
 *	indexが全サンプル数より大きければ書き込まない
 *
 ****************************************************************************************/
-void BSoundInformation::setSample(double sample,long num,short channel)
+void BWaveForm::setSample(double sample,long num,short channel)
 {
 	short numChan = this->getNumChannels();
 	long index = numChan*num + channel;
@@ -368,7 +368,7 @@ void BSoundInformation::setSample(double sample,long num,short channel)
 *&operator= : =演算子のオーバーロード
 *
 *引数
-*	=演算子の右辺のBSoundInformation
+*	=演算子の右辺のBWaveForm
 *
 *ローカル変数
 *	なし
@@ -385,7 +385,7 @@ void BSoundInformation::setSample(double sample,long num,short channel)
 *	１サンプルのビット数を設定
 *
 *******************************************************************************************************/
-const BSoundInformation &BSoundInformation::operator=(const BSoundInformation &right)
+const BWaveForm& BWaveForm::operator=(const BWaveForm& right)
 {
 	if(this == &right) return *this;
 	
@@ -400,7 +400,7 @@ const BSoundInformation &BSoundInformation::operator=(const BSoundInformation &r
 		}
 		catch(bad_alloc err)
 		{
-			cerr << "BSoundInformation::operator=. " << err.what() << endl;
+			cerr << "BWaveForm::operator=. " << err.what() << endl;
 		}
 	}
 	memcpy(this->m_pdSample, right.m_pdSample, this->getNumSamples()*sizeof(double));
@@ -414,9 +414,9 @@ const BSoundInformation &BSoundInformation::operator=(const BSoundInformation &r
 /********************************************
  * +演算子のオーバーロード.
  ********************************************/
-BSoundInformation BSoundInformation::operator+(const BSoundInformation &ob)
+BWaveForm BWaveForm::operator+(const BWaveForm& ob)
 {
-	BSoundInformation temp;
+	BWaveForm temp;
 	if(this->getSampleRate() < ob.getSampleRate())
 	{
 		temp.setSampleRate(this->getSampleRate());
@@ -472,7 +472,7 @@ BSoundInformation BSoundInformation::operator+(const BSoundInformation &ob)
 /**********************************************
  * +=演算子のオーバーロード.
  **********************************************/
-const BSoundInformation &BSoundInformation::operator+=(BSoundInformation &ob)
+const BWaveForm& BWaveForm::operator+=(BWaveForm& ob)
 {
 	if(this->getSampleRate() != ob.getSampleRate())
 	{
@@ -560,7 +560,7 @@ const BSoundInformation &BSoundInformation::operator+=(BSoundInformation &ob)
 *その他のところは0と近似してしまう
 *
 ******************************************/
-double BSoundInformation::sinc(double i_dSample)
+double BWaveForm::sinc(double i_dSample)
 {
 	if(i_dSample < 0.0) i_dSample = -i_dSample;
     
@@ -589,7 +589,7 @@ double BSoundInformation::sinc(double i_dSample)
 *	閾値の整数点からその間(xの値)を補完する
 *
 *********************************************/
-double BSoundInformation::interpolation(double i_dThreshold, short i_shChannel)
+double BWaveForm::interpolation(double i_dThreshold, short i_shChannel)
 {
 	long a_lThresholdInteger;
     

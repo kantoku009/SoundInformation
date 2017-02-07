@@ -30,13 +30,13 @@ CDataChunkOperator::CDataChunkOperator()
 /**
  * data chunkをファイルから読み込み.
  */
-bool  CDataChunkOperator::read(ifstream& i_cFileStream, CWaveFormatOperator& i_pcWaveFormatOperator, T_CHUNK& i_stChunk)
+bool  CDataChunkOperator::read(ifstream& i_cFileStream, CWaveFile& i_pcWaveFile, T_CHUNK& i_stChunk)
 {
-	long lDataSize = CWaveFormatOperatorUtility::convert4ByteDataToLong(i_stChunk.m_szSize);
-	i_pcWaveFormatOperator.setSamplesPerChannel(lDataSize/i_pcWaveFormatOperator.getBlockAlign());
+	long lDataSize = CWaveFileUtility::convert4ByteDataToLong(i_stChunk.m_szSize);
+	i_pcWaveFile.setSamplesPerChannel(lDataSize/i_pcWaveFile.getBlockAlign());
 
 	// 量子化ビットを取得.
-	short a_BitsPerSample = i_pcWaveFormatOperator.getBitsPerSample();
+	short a_BitsPerSample = i_pcWaveFile.getBitsPerSample();
 	
 	// サンプル値の読み込む方法を生成. (1サンプル 8bit, 16bit...のどれで読み込むかを決定).
 	CFactorySampleOperator a_CFactorySampleOperator;
@@ -44,12 +44,12 @@ bool  CDataChunkOperator::read(ifstream& i_cFileStream, CWaveFormatOperator& i_p
 	a_piSampleOperator = a_CFactorySampleOperator.create(a_BitsPerSample);
 	
 	// read sample.
-	for(long index=0;index<i_pcWaveFormatOperator.getSamplesPerChannel();index++)
+	for(long index=0;index<i_pcWaveFile.getSamplesPerChannel();index++)
 	{
-		for(short channel=0;channel<i_pcWaveFormatOperator.getNumChannels();channel++)
+		for(short channel=0;channel<i_pcWaveFile.getNumChannels();channel++)
 		{
 			double a_dSample = a_piSampleOperator->read(i_cFileStream);
-			i_pcWaveFormatOperator.setSample(a_dSample, index, channel);
+			i_pcWaveFile.setSample(a_dSample, index, channel);
 		}
 	}
 	
@@ -60,7 +60,7 @@ bool  CDataChunkOperator::read(ifstream& i_cFileStream, CWaveFormatOperator& i_p
 /**
  * data chunkをファイルへ書き込み.
  */
-bool CDataChunkOperator::write(ofstream& i_cFileStream, CWaveFormatOperator& i_pcWaveFormatOperator)
+bool CDataChunkOperator::write(ofstream& i_cFileStream, CWaveFile& i_pcWaveFile)
 {
 	T_CHUNK a_stChunk;
 	memset((char*)&a_stChunk, 0x00, sizeof(a_stChunk));
@@ -69,14 +69,14 @@ bool CDataChunkOperator::write(ofstream& i_cFileStream, CWaveFormatOperator& i_p
 	strncpy(a_stChunk.m_szID, this->m_szID, sizeof(a_stChunk.m_szID));
 	
 	// "data"のサイズを計算.
-	long lDataSize = i_pcWaveFormatOperator.getSamplesPerChannel() * i_pcWaveFormatOperator.getBlockAlign();
-	CWaveFormatOperatorUtility::convertLongTo4ByteData(lDataSize, a_stChunk.m_szSize);
+	long lDataSize = i_pcWaveFile.getSamplesPerChannel() * i_pcWaveFile.getBlockAlign();
+	CWaveFileUtility::convertLongTo4ByteData(lDataSize, a_stChunk.m_szSize);
 	
 	// chunkをファイルへ書き込み.
 	i_cFileStream.write((char*)&a_stChunk, sizeof(a_stChunk));
     
 	// 量子化ビットを取得.
-	short a_BitsPerSample = i_pcWaveFormatOperator.getBitsPerSample();
+	short a_BitsPerSample = i_pcWaveFile.getBitsPerSample();
 	
 	// サンプル値の読み込む方法を生成. (1サンプル 8bit, 16bit...のどれで読み込むかを決定).
 	CFactorySampleOperator a_CFactorySampleOperator;
@@ -85,11 +85,11 @@ bool CDataChunkOperator::write(ofstream& i_cFileStream, CWaveFormatOperator& i_p
 	
 	// write sample.
 	bool a_bIsWriteSuccess = true;
-	for(long index=0;index<i_pcWaveFormatOperator.getSamplesPerChannel();index++)
+	for(long index=0;index<i_pcWaveFile.getSamplesPerChannel();index++)
 	{
-		for(short channel=0;channel<i_pcWaveFormatOperator.getNumChannels();channel++)
+		for(short channel=0;channel<i_pcWaveFile.getNumChannels();channel++)
 		{
-			double a_Sample = i_pcWaveFormatOperator.getSample(index,channel);
+			double a_Sample = i_pcWaveFile.getSample(index,channel);
 			a_bIsWriteSuccess = a_piSampleOperator->write(a_Sample, i_cFileStream);
 			if(a_bIsWriteSuccess) break;
 			

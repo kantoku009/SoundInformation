@@ -45,20 +45,20 @@ public:
 	/**
 	 * @brief	WAVEファイルのChunkを読み込む.
 	 * @param	T_CHUNK& i_stChunk
-	 * @param	CWaveFormatOperator& pcWaveFormatOperator
+	 * @param	CWaveFile& pcWaveFile
 	 * @param	ifstream& i_cFileStream.
 	 * @return	成功 / 失敗.
 	 */
-	bool read(ifstream& i_cFileStream, CWaveFormatOperator& i_pcWaveFormatOperator, T_CHUNK& i_stChunk);
+	bool read(ifstream& i_cFileStream, CWaveFile& i_pcWaveFile, T_CHUNK& i_stChunk);
 	
 	/**
 	 * @brief	WAVEファイルのChunkを書き込む.
 	 * @param	T_CHUNK& i_stChunk
-	 * @param	CWaveFormatOperator& pcWaveFormatOperator
+	 * @param	CWaveFile& pcWaveFile
 	 * @param	ifstream& i_cFileStream.
 	 * @return	成功 / 失敗.
 	 */
-	bool write(ofstream& i_cFileStream, CWaveFormatOperator& i_pcWaveFormatOperator);
+	bool write(ofstream& i_cFileStream, CWaveFile& i_pcWaveFile);
 
 protected:
 	/**

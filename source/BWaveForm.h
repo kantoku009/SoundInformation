@@ -1,15 +1,15 @@
 /**
- * @file	BSoundInformation.h
+ * @file	BWaveForm.h
  * @brief	音声を扱うクラス.
  */
 
-#ifndef __BSOUND_INFORMATION_H__
-#define __BSOUND_INFORMATION_H__
+#ifndef __BWAVEFORM_H__
+#define __BWAVEFORM_H__
 
 /**
  * @brief	音声を扱うクラス.
  */
-class BSoundInformation
+class BWaveForm
 {
 public:
 	/**
@@ -20,7 +20,7 @@ public:
 	 * @param	long  numSamples		サンプル数. [sample/channel].
 	 * @return	なし.
 	 */
-	BSoundInformation(
+	BWaveForm(
 					long  sampleRate=44100,
 					short bitsPerSample=8,
 					short numChannels=1,
@@ -28,10 +28,10 @@ public:
     
 	/**
 	 * @brief	コピーコンストラクタ.
-	 * @param	const BSoundInformation &ob
+	 * @param	const BWaveForm &ob
 	 * @return	なし.
 	 */
-	BSoundInformation(const BSoundInformation &ob);
+	BWaveForm(const BWaveForm &ob);
 
 	/**
 	 * @brief	デストラクタ.
@@ -39,7 +39,7 @@ public:
 	 * @return	なし.
 	 * @note	コンストラクタで確保したメモリの確保.
 	 */
-	virtual ~BSoundInformation()
+	virtual ~BWaveForm()
 	{
 		delete [] this->m_pdSample;
 		this->m_pdSample=0;
@@ -142,17 +142,17 @@ public:
 	/**
 	 * @brief	=演算子のオーバーロード.
 	 */
-	const BSoundInformation &operator=(const BSoundInformation &right);
+	const BWaveForm &operator=(const BWaveForm &right);
 
 	/**
 	 * @brief	+=演算子のオーバーロード.
 	 */
-	const BSoundInformation &operator+=(BSoundInformation &ob);
+	const BWaveForm &operator+=(BWaveForm &ob);
 
 	/**
 	 * @brief	+演算子のオーバーロード.
 	 */
-	BSoundInformation operator+(const BSoundInformation &ob);
+	BWaveForm operator+(const BWaveForm &ob);
     
 	/**
 	 * @brief	サンプルとサンプルの間の補間.
@@ -191,5 +191,5 @@ protected:
 	double  *m_pdSample;
 };
 
-#endif	//__BSOUND_INFORMATION_H__
+#endif	//__BWAVEFORM_H__
 

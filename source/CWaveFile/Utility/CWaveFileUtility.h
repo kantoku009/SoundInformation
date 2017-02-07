@@ -1,17 +1,17 @@
 /**
- * @file	CWaveFormatOperatorUtility.h
+ * @file	CWaveFileUtility.h
  * @brief	SoundInformationのユーティリティクラス.
  */
 
-#ifndef __CWAVEFORMATOPERATORUTILITY_H__
-#define __CWAVEFORMATOPERATORUTILITY_H__
+#ifndef __CWAVEFILEUTILITY_H__
+#define __CWAVEFILEUTILITY_H__
 
 
-class CWaveFormatOperatorUtility
+class CWaveFileUtility
 {
 public:
-	CWaveFormatOperatorUtility();
-	~CWaveFormatOperatorUtility();
+	CWaveFileUtility();
+	~CWaveFileUtility();
 
 	/**
 	 * @brief	bit shiftをする.
@@ -80,4 +80,4 @@ public:
 
 };
 
-#endif	//__CWAVEFORMATOPERATORUTILITY_H__
+#endif	//__CWAVEFILEUTILITY_H__

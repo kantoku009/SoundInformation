@@ -2,8 +2,8 @@
 #include <iostream>
 using namespace std;
 
-#ifndef __CWAVEFORMATOPERATORUTILITY_H__
-#include "../Utility/CWaveFormatOperatorUtility.h"
+#ifndef __CWAVEFILEUTILITY_H__
+#include "../Utility/CWaveFileUtility.h"
 #endif
 
 #ifndef __CSAMPLEOPERATOR8_H__
@@ -23,7 +23,7 @@ CSampleOperator8::CSampleOperator8()
  */
 double CSampleOperator8::read(ifstream& i_cFileStream)
 {
-	long max = CWaveFormatOperatorUtility::bitShift(this->m_shBitsPerSample - 1) - 1;
+	long max = CWaveFileUtility::bitShift(this->m_shBitsPerSample - 1) - 1;
 
 	char data = 0;
 	i_cFileStream.read((char*)&data,sizeof(char));
@@ -37,7 +37,7 @@ double CSampleOperator8::read(ifstream& i_cFileStream)
  */
 bool CSampleOperator8::write(double i_dSample, ofstream& i_cFileStream)
 {
-	long max = CWaveFormatOperatorUtility::bitShift(this->m_shBitsPerSample - 1) - 1;
+	long max = CWaveFileUtility::bitShift(this->m_shBitsPerSample - 1) - 1;
 
 	char data = 0;
 	data = max * i_dSample;

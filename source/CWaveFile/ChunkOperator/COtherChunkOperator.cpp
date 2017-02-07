@@ -22,16 +22,16 @@ COtherChunkOperator::COtherChunkOperator()
 /**
  * chunkをファイルから読み込み.
  */
-bool  COtherChunkOperator::read(ifstream& i_cFileStream, CWaveFormatOperator& i_pcWaveFormatOperator, T_CHUNK& i_stChunk)
+bool  COtherChunkOperator::read(ifstream& i_cFileStream, CWaveFile& i_pcWaveFile, T_CHUNK& i_stChunk)
 {
-	return BChunkOperator::read(i_cFileStream, i_pcWaveFormatOperator, i_stChunk);
+	return BChunkOperator::read(i_cFileStream, i_pcWaveFile, i_stChunk);
 }
 
 /**
  * chunkをファイルへ書き込み.
  */
-bool COtherChunkOperator::write(ofstream& i_cFileStream, CWaveFormatOperator& i_pcWaveFormatOperator)
+bool COtherChunkOperator::write(ofstream& i_cFileStream, CWaveFile& i_pcWaveFile)
 {
-	return BChunkOperator::write(i_cFileStream, i_pcWaveFormatOperator);
+	return BChunkOperator::write(i_cFileStream, i_pcWaveFile);
 }
 

@@ -7,11 +7,11 @@ SRCS_WAVEFORMAT_OPERATOR_DIR := ../source
 include ../source/Makefile
 
 #Test code SRC
-SRCS_TEST_WAVEFORMAT_OPERATOR = ./test_WaveFormatOperator.cpp
+SRCS_TEST_WAVEFORMAT_OPERATOR = ./test_CWaveFile.cpp
 
 
 #Outfilename
-OUTFILE_TEST_WAVEFORMAT_OPERATOR = ./test_WaveFormatOperator
+OUTFILE_TEST_WAVEFORMAT_OPERATOR = ./test_WaveFileOperator
 
 default:
 	$(CC) $(LDFLAGS) -o $(OUTFILE_TEST_WAVEFORMAT_OPERATOR) $(LIBS) $(SRCS_TEST_WAVEFORMAT_OPERATOR) $(SRCS_WAVEFORMAT_OPERATOR)

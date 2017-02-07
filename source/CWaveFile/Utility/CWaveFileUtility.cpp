@@ -1,17 +1,17 @@
 /**
- * @file	CWaveFormatOperatorUtility.h
- * @brief	CWaveFormatOperatorのユーティリティクラス.
+ * @file	CWaveFileUtility.h
+ * @brief	CWaveFileのユーティリティクラス.
  */
 
 #include <cstring>		//memcpyを使用したい.
 using namespace std;
 
-#include "CWaveFormatOperatorUtility.h"
+#include "CWaveFileUtility.h"
 
 /**************************************************
  * bit shiftをする.
  **************************************************/
-long CWaveFormatOperatorUtility::bitShift(short i_shBitShift)
+long CWaveFileUtility::bitShift(short i_shBitShift)
 {
 	long a_lRet=1;
     
@@ -24,7 +24,7 @@ long CWaveFormatOperatorUtility::bitShift(short i_shBitShift)
 /**************************************************
  * Big-endianか否かを調べる.
  **************************************************/
-bool CWaveFormatOperatorUtility::isBigEndian()
+bool CWaveFileUtility::isBigEndian()
 {
 	short	a_shCheck = 1;
 	bool	a_bIsBigEndian = false;
@@ -44,7 +44,7 @@ bool CWaveFormatOperatorUtility::isBigEndian()
 /**************************************************
  * long型 Little-endian -> Big-endian を変換する.
  **************************************************/
-long CWaveFormatOperatorUtility::swapLong(char* i_pbyData)
+long CWaveFileUtility::swapLong(char* i_pbyData)
 {
 	return (*i_pbyData<<24) | (*(i_pbyData+1)<<16) | (*(i_pbyData+2)<<8) | *(i_pbyData+3);
 }
@@ -52,7 +52,7 @@ long CWaveFormatOperatorUtility::swapLong(char* i_pbyData)
 /**************************************************
  * short型 Little-endian -> Big-endian を変換する.
  **************************************************/
-short CWaveFormatOperatorUtility::swapShort(char* i_pbyData)
+short CWaveFileUtility::swapShort(char* i_pbyData)
 {
 	return (*i_pbyData<<8) | *(i_pbyData+1);
 }
@@ -61,7 +61,7 @@ short CWaveFormatOperatorUtility::swapShort(char* i_pbyData)
 /**************************************************
  * int型 Little-endian -> Big-endian を変換する.
  **************************************************/
-int CWaveFormatOperatorUtility::swapInt(char* i_pbyData)
+int CWaveFileUtility::swapInt(char* i_pbyData)
 {
 	switch (sizeof(int))
 	{
@@ -78,7 +78,7 @@ int CWaveFormatOperatorUtility::swapInt(char* i_pbyData)
 /*********************************
  * 2ByteDataをshort型に変換する.
  *********************************/
-short CWaveFormatOperatorUtility::convert2ByteDataToShort(char* i_pbyData)
+short CWaveFileUtility::convert2ByteDataToShort(char* i_pbyData)
 {
 	short a_shSize = 0;
 
@@ -90,7 +90,7 @@ short CWaveFormatOperatorUtility::convert2ByteDataToShort(char* i_pbyData)
 /*********************************
  * short型を2ByteDataに変換する.
  *********************************/
-void CWaveFormatOperatorUtility::convertShortTo2ByteData(short i_shInteger, char* i_pbyData)
+void CWaveFileUtility::convertShortTo2ByteData(short i_shInteger, char* i_pbyData)
 {
 	bool a_bIsBigEndian = isBigEndian();
 	if(a_bIsBigEndian) i_shInteger = swapShort((char*)&i_shInteger);
@@ -101,7 +101,7 @@ void CWaveFormatOperatorUtility::convertShortTo2ByteData(short i_shInteger, char
 /*********************************
  * 4ByteDataをlong型に変換する.
  *********************************/
-long CWaveFormatOperatorUtility::convert4ByteDataToLong(char* i_pbyData)
+long CWaveFileUtility::convert4ByteDataToLong(char* i_pbyData)
 {
 	long a_lSize = 0;
 
@@ -113,7 +113,7 @@ long CWaveFormatOperatorUtility::convert4ByteDataToLong(char* i_pbyData)
 /**********************************
  * long型を4ByteDataに変換する.
  **********************************/
-void CWaveFormatOperatorUtility::convertLongTo4ByteData(long i_lInteger, char* i_pbyData)
+void CWaveFileUtility::convertLongTo4ByteData(long i_lInteger, char* i_pbyData)
 {
 	bool a_bIsBigEndian = isBigEndian();
 	if(a_bIsBigEndian) i_lInteger = swapLong((char*)&i_lInteger);

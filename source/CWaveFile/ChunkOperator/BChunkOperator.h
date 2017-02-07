@@ -9,12 +9,12 @@
 #include <fstream>
 using namespace std;
 
-#ifndef __CWAVE_FORMAT_OPERATOR_H__
-#include "../../CWaveFormatOperator.h"
+#ifndef __CWAVEFILE_H__
+#include "../../CWaveFile.h"
 #endif
 
-#ifndef __CWAVEFORMATOPERATORUTILITY_H__
-#include "../Utility/CWaveFormatOperatorUtility.h"
+#ifndef __CWAVEFILEUTILITY_H__
+#include "../Utility/CWaveFileUtility.h"
 #endif
 
 /**
@@ -45,20 +45,20 @@ public:
 	/**
 	 * @brief	WAVEファイルのChunkを読み込む.
 	 * @param	T_CHUNK& i_stChunk
-	 * @param	CWaveFormatOperator& pcWaveFormatOperator
+	 * @param	CWaveFile& pcWaveFile
 	 * @param	ifstream& i_cFileStream.
 	 * @return	成功 / 失敗.
 	 */
-	virtual bool read(ifstream& i_cFileStream, CWaveFormatOperator& i_pcWaveFormatOperator, T_CHUNK& i_stChunk);
+	virtual bool read(ifstream& i_cFileStream, CWaveFile& i_pcWaveFile, T_CHUNK& i_stChunk);
 
 	/**
 	 * @brief	WAVEファイルのChunkを書き込む.
 	 * @param	T_CHUNK& i_stChunk
-	 * @param	CWaveFormatOperator& pcWaveFormatOperator
+	 * @param	CWaveFile& pcWaveFile
 	 * @param	ifstream& i_cFileStream.
 	 * @return	成功 / 失敗.
 	 */
-	virtual bool write(ofstream& i_cFileStream, CWaveFormatOperator& i_pcWaveFormatOperator);
+	virtual bool write(ofstream& i_cFileStream, CWaveFile& i_pcWaveFile);
 
 	/**
 	 * @brief	Chunk IDを取得.

@@ -24,9 +24,9 @@ BChunkOperator::BChunkOperator()
 /**
  * chunkをファイルから読み込み.
  */
-bool  BChunkOperator::read(ifstream& i_cFileStream, CWaveFormatOperator& i_pcWaveFormatOperator, T_CHUNK& i_stChunk)
+bool  BChunkOperator::read(ifstream& i_cFileStream, CWaveFile& i_pcWaveFile, T_CHUNK& i_stChunk)
 {
-	long lSize = CWaveFormatOperatorUtility::convert4ByteDataToLong(i_stChunk.m_szSize);
+	long lSize = CWaveFileUtility::convert4ByteDataToLong(i_stChunk.m_szSize);
 	i_cFileStream.seekg(lSize,ios::cur);
 	if(m_bIsDEBUG) this->printChunk((char*)"Read Chunk", i_stChunk);
 	return true;
@@ -35,7 +35,7 @@ bool  BChunkOperator::read(ifstream& i_cFileStream, CWaveFormatOperator& i_pcWav
 /**
  * chunkをファイルへ書き込み.
  */
-bool BChunkOperator::write(ofstream& i_cFileStream, CWaveFormatOperator& i_pcWaveFormatOperator)
+bool BChunkOperator::write(ofstream& i_cFileStream, CWaveFile& i_pcWaveFile)
 {
 	return true;
 }
@@ -47,6 +47,6 @@ void BChunkOperator::printChunk(char* i_pbyMessage, T_CHUNK& i_stChunk)
 {
 	printf("%s\n", i_pbyMessage);
 	printf("  %c%c%c%c\n", i_stChunk.m_szID[0], i_stChunk.m_szID[1], i_stChunk.m_szID[2], i_stChunk.m_szID[3]);
-	long lSize = CWaveFormatOperatorUtility::convert4ByteDataToLong(i_stChunk.m_szSize);
+	long lSize = CWaveFileUtility::convert4ByteDataToLong(i_stChunk.m_szSize);
 	printf("  0x%08lX\n", lSize);
 }

@@ -22,7 +22,7 @@ CWAVEChunkOperator::CWAVEChunkOperator()
 /**
  * WAVE chunkをファイルから読み込み.
  */
-bool  CWAVEChunkOperator::read(ifstream& i_cFileStream, CWaveFormatOperator& i_pcWaveFormatOperator, T_CHUNK& i_stChunk)
+bool  CWAVEChunkOperator::read(ifstream& i_cFileStream, CWaveFile& i_pcWaveFile, T_CHUNK& i_stChunk)
 {
 	memset((char*)&i_stChunk, 0x00, sizeof(i_stChunk));
 	
@@ -42,7 +42,7 @@ bool  CWAVEChunkOperator::read(ifstream& i_cFileStream, CWaveFormatOperator& i_p
 /**
  * WAVE chunkをファイルへ書き込み.
  */
-bool CWAVEChunkOperator::write(ofstream& i_cFileStream, CWaveFormatOperator& i_pcWaveFormatOperator)
+bool CWAVEChunkOperator::write(ofstream& i_cFileStream, CWaveFile& i_pcWaveFile)
 {
 	T_CHUNK a_stChunk;
 	memset((char*)&a_stChunk, 0x00, sizeof(a_stChunk));

@@ -1,33 +1,33 @@
 /**
- * @file	CWaveFormatOperator.h
+ * @file	CWaveFile.h
  * @brief	WAVEファイルを操作するクラス.
  */
 
-#ifndef __CWAVE_FORMAT_OPERATOR_H__
-#define __CWAVE_FORMAT_OPERATOR_H__
+#ifndef __CWAVEFILE_H__
+#define __CWAVEFILE_H__
 
 #include <fstream>
 using namespace std;
 
-#ifndef __BSOUND_INFORMATION_H__
-#include "BSoundInformation.h"
+#ifndef __BWAVEFORM_H__
+#include "BWaveForm.h"
 #endif
 
 /**
  * @brief	WAVEファイルを扱うクラス.
  */
-class CWaveFormatOperator : public BSoundInformation
+class CWaveFile : public BWaveForm
 {
 public:
 	/**
 	 * @brief	コンストラクタ.
 	 */
-	CWaveFormatOperator(
+	CWaveFile(
 						long  sampleRate=44100,
 						short bitsPerSample=16,
 						short numChannels=2,
 						long  numSamples=44100)
-			:BSoundInformation(
+			:BWaveForm(
 							sampleRate, 
 							bitsPerSample, 
 							numChannels, 
@@ -38,7 +38,7 @@ public:
 	/**
 	 * @brief	デストラクタ.
 	 */
-	virtual ~CWaveFormatOperator(){ }
+	virtual ~CWaveFile(){ }
 
 	/**
 	 * @brief	WAVEファイルから読みこみ.
@@ -56,5 +56,5 @@ public:
 
 };
 
-#endif	//__CWAVE_FORMAT_OPERATOR_H__
+#endif	//__CWAVEFILE_H__
 

@@ -1,5 +1,5 @@
 /**
- * @file	CWaveFormatOperator.cpp
+ * @file	CWaveFile.cpp
  * @brief	WAVEファイルを操作するクラス.
  */
  
@@ -10,8 +10,8 @@
 #include <cstring>
 using namespace std;
 
-#ifndef __CWAVE_FORMAT_OPERATOR_H__
-#include "../CWaveFormatOperator.h"
+#ifndef __CWAVEFILE_H__
+#include "../CWaveFile.h"
 #endif
 
 #ifndef __CCHUNKFACTORY_H__
@@ -41,7 +41,7 @@ private:
 /**
  * WAVEファイルから読みこみ.
  */
-bool CWaveFormatOperator::read(const string i_strFileName)
+bool CWaveFile::read(const string i_strFileName)
 {
 	ifstream   fp(i_strFileName.c_str(),ios::binary);
 
@@ -64,7 +64,7 @@ bool CWaveFormatOperator::read(const string i_strFileName)
 		a_bIsSuccess = a_pbChunk->read(fp, *this, a_stChunk);
 		if(false == a_bIsSuccess)
 		{
-			throw WaveFormatError((char*)"CWaveFormatOperator read error: not RIFF chunk."); 
+			throw WaveFormatError((char*)"CWaveFile read error: not RIFF chunk."); 
 		}
 
 		//'WAVE'
@@ -72,7 +72,7 @@ bool CWaveFormatOperator::read(const string i_strFileName)
 		a_bIsSuccess = a_pbChunk->read(fp, *this, a_stChunk);
 		if(false == a_bIsSuccess)
 		{
-			throw WaveFormatError((char*)"CWaveFormatOperator read error: not WAVE chunk.");
+			throw WaveFormatError((char*)"CWaveFile read error: not WAVE chunk.");
 		}
 
 		while( fp.read((char*)&a_stChunk,sizeof(a_stChunk)) )
@@ -85,7 +85,7 @@ bool CWaveFormatOperator::read(const string i_strFileName)
 				char a_szChunkID[5];
 				memset(a_szChunkID, 0x00, 5);
 				memcpy(a_szChunkID, a_stChunk.m_szID, 4);
-				sprintf(a_szErrorString, "CWaveFormatOperator read error: %s chunk.", a_szChunkID);
+				sprintf(a_szErrorString, "CWaveFile read error: %s chunk.", a_szChunkID);
 				throw WaveFormatError((char*)a_szErrorString);
 			}
 		}
@@ -102,12 +102,12 @@ bool CWaveFormatOperator::read(const string i_strFileName)
 /**
  * WAVEファイルに書き込み.
  */
-bool CWaveFormatOperator::write(const string i_strFileName)
+bool CWaveFile::write(const string i_strFileName)
 {
 	ofstream      fp(i_strFileName.c_str(),ios::binary);
 	if(!fp)
 	{
-		cerr << "CWaveFormatOperator error: do not open" << i_strFileName << endl;
+		cerr << "CWaveFile error: do not open" << i_strFileName << endl;
 		return false;
 	}
 
@@ -137,7 +137,7 @@ bool CWaveFormatOperator::write(const string i_strFileName)
 				char a_szChunkID[5];
 				memset(a_szChunkID, 0x00, 5);
 				memcpy(a_szChunkID, a_pszID, 4);
-				sprintf(a_szErrorString, "CWaveFormatOperator write error: %s chunk.", a_pszID);
+				sprintf(a_szErrorString, "CWaveFile write error: %s chunk.", a_pszID);
 				throw WaveFormatError((char*)a_szErrorString);
 			}
 		}
