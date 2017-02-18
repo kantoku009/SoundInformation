@@ -1,6 +1,6 @@
 /**
  * @file	CRIFFChunkOperator.cpp
- * @brief	WAVEファイルのChunkクラス.
+ * @brief	WAVEファイルのRIFF Chunkクラス.
  */
 
 #include <cstring>
@@ -21,6 +21,7 @@ CRIFFChunkOperator::CRIFFChunkOperator()
 {
 	strncpy(m_szID, "RIFF", 4);
 	m_lSize = 0;
+	strncpy(m_szType, "WAVE", 4);
 }
 
 /**

@@ -1,6 +1,6 @@
 /**
  * @file	COtherChunkOperator.cpp
- * @brief	WAVEファイルのChunkクラス.
+ * @brief	WAVEファイルのその他Chunkクラス.
  */
 
 #include <cstring>

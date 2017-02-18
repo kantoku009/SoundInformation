@@ -1,6 +1,11 @@
 /**
  * @file	COtherChunkOperator.h
- * @brief	WAVEファイルのChunkクラス.
+ * @brief	WAVEファイルのその他Chunkクラス.
+ * @note	以下のいずれかでもないChunk
+ *			　・RIFF
+ *			　・WAVE
+ *			　・fmt 
+ *			　・data
  */
 
 #ifndef __COTHERCHUNKOPERATOR_H__
@@ -14,7 +19,7 @@ using namespace std;
 #endif
 
 /**
- * @brief	WAVEファイルのChunk.
+ * @brief	WAVEファイルのその他Chunk.
  */
 class COtherChunkOperator : public BChunkOperator
 {

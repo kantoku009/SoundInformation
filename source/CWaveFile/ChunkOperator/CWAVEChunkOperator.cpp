@@ -1,6 +1,6 @@
 /**
  * @file	CWAVEChunkOperator.cpp
- * @brief	WAVEファイルのChunkクラス.
+ * @brief	WAVEファイルのWAVE Chunkクラス.
  */
 
 #include <cstring>

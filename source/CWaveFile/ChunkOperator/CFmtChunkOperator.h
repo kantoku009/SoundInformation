@@ -1,6 +1,6 @@
 /**
  * @file	CFmtChunkOperator.h
- * @brief	WAVEファイルのChunkクラス.
+ * @brief	WAVEファイルのfmt Chunkクラス.
  */
 
 #ifndef __CFMTCHUNKOPERATOR_H__
@@ -27,7 +27,7 @@ typedef struct T_FMT_CHUNK
 }T_FMT_CHUNK;
 
 /**
- * @brief	WAVEファイルのChunk.
+ * @brief	WAVEファイルのfmt Chunk.
  */
 class CFmtChunkOperator : public BChunkOperator
 {

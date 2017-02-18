@@ -1,6 +1,6 @@
 /**
  * @file	CRIFFChunkOperator.h
- * @brief	WAVEファイルのChunkクラス.
+ * @brief	WAVEファイルのRIFF Chunkクラス.
  */
 
 #ifndef __CRIFFCHUNKOPERATOR_H__
@@ -14,7 +14,7 @@ using namespace std;
 #endif
 
 /**
- * @brief	WAVEファイルのChunk.
+ * @brief	WAVEファイルのRIFF Chunk.
  */
 class CRIFFChunkOperator : public BChunkOperator
 {
@@ -46,6 +46,9 @@ public:
 	 * @return	成功 / 失敗.
 	 */
 	bool write(ofstream& i_cFileStream, CWaveFile& i_pcWaveFile);
+
+private:
+	char m_szType[4];
 	
 };
 

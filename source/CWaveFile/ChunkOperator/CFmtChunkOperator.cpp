@@ -1,6 +1,6 @@
 /**
  * @file	CFmtChunkOperator.cpp
- * @brief	WAVEファイルのChunkクラス.
+ * @brief	WAVEファイルのfmt Chunkクラス.
  */
 
 #include <cstring>

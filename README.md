@@ -1,4 +1,4 @@
-[SoundInformation](https://github.com/kantoku009/SoundInformation)
+[WaveFormOperator](https://github.com/kantoku009/WaveFormOperator)
 ====================
 #はじめに
 C++言語にてWAVEファイルを読み/書きできるプログラムを作成した。
@@ -6,8 +6,8 @@ C++言語にてWAVEファイルを読み/書きできるプログラムを作成
 
 GitHubのリポジトリと全ソースコードのダウンロードは以下URLから行える。
 
-- [Githubのリポジトリ](https://github.com/kantoku009/SoundInformation)
-- [全ソースコードのダウンロード](https://github.com/kantoku009/SoundInformation/archive/master.zip)
+- [Githubのリポジトリ](https://github.com/kantoku009/WaveFormOperator)
+- [全ソースコードのダウンロード](https://github.com/kantoku009/WaveFormOperator/archive/master.zip)
 
 ----
 
@@ -15,7 +15,7 @@ GitHubのリポジトリと全ソースコードのダウンロードは以下UR
 クラス図とシーケンス図を作成した。  
 以下からダウンロード可能。  
 
- - [UML](https://github.com/kantoku009/SoundInformation/blob/master/document/UML.asta?raw=true)
+ - [UML](https://github.com/kantoku009/WaveFormOperator/blob/master/document/UML.asta?raw=true)
 
 UMLの作成には無償のUMLモデリングツール[astah community](http://astah.change-vision.com/ja/)を使用している。  
 
@@ -38,7 +38,7 @@ UMLの作成には無償のUMLモデリングツール[astah community](http://a
 	<dd>makeを実行</dd>
 </dl>
 
-	%unzip SoundInformation-master.zip
+	%unzip WaveFormOperator-master.zip
 	%cd ./source/test_source
 	%make
 

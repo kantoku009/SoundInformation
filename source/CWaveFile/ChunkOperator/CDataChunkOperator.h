@@ -1,6 +1,6 @@
 /**
  * @file	CDataChunkOperator.h
- * @brief	WAVEファイルのChunkクラス.
+ * @brief	WAVEファイルのdata Chunkクラス.
  */
 
 #ifndef __CDATACHUNKOPERATOR_H__
@@ -14,7 +14,7 @@ using namespace std;
 #endif
 
 /**
- * @brief	WAVEファイルのChunk.
+ * @brief	WAVEファイルのdata Chunk.
  */
 class CDataChunkOperator : public BChunkOperator
 {

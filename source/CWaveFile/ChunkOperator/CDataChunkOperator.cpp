@@ -1,6 +1,6 @@
 /**
  * @file	CDataChunkOperator.cpp
- * @brief	WAVEファイルのChunkクラス.
+ * @brief	WAVEファイルのdata Chunkクラス.
  */
 
 #include <cstring>
