@@ -23,15 +23,15 @@ RIFFファイルはコンテナである為、WAVEファイル以外にも種類
 
 RIFF Chunkの構造を以下に示す。  
 
-|フィールド名	|サイズ		|説明				|
-|:-				|:-			|:-					|
-|Chunk ID		|4[Byte]	|'RIFF'				|
-|Chunk Size		|4[Byte]	|ファイルサイズ-8	|
-|RIFF Type		|4[Byte]	|'WAVE'				|
+|フィールド名	|サイズ		|説明				|  
+|:-				|:-			|:-					|  
+|Chunk ID		|4[Byte]	|'RIFF'				|  
+|Chunk Size		|4[Byte]	|ファイルサイズ-8	|  
+|RIFF Type		|4[Byte]	|'WAVE'				|  
 
 C言語の構造体で表すと以下のように定義される。
 
-```
+```C
 struct
 {
   char 	m_szID[4];		// 'RIFF'
@@ -47,28 +47,28 @@ WAVEファイルの種々の情報が格納されているChunk。
 
 fmt Chunkの構造を以下に示す。  
 
-|フィールド名	|サイズ		|説明								|
-|:-				|:-			|:-									|
-|Chunk ID		|4[Byte]	|'fmt '(最後は空白). 	|
-|Chunk Size		|4[Byte]	|FMTチャンクのサイズ				|
-|FMT Chunk		|n[Byte]	|FMT Chunkを参照. ※				|
+|フィールド名	|サイズ		|説明								|  
+|:-				|:-			|:-									|  
+|Chunk ID		|4[Byte]	|'fmt '(最後は空白). 	|  
+|Chunk Size		|4[Byte]	|FMTチャンクのサイズ				|  
+|FMT Chunk		|n[Byte]	|FMT Chunkを参照. ※				|  
 
 ※FMT ChunkとFMTEX Chunkでサイズが異なる。  
 
 FMT Chunk.
 
-|フィールド名	|サイズ		|説明							|
-|:-				|:-			|:-								|
-|FormatTag		|2[Byte]	|フォーマットタグ. PCMならば1.	|
-|Channels		|2[Byte]	|チャンネル数					|
-|SamplesPerSec	|4[Byte]	|サンプリング周波数				|
-|AvgBytesPerSec	|4[Byte]	|単位時間当たりのサイズ			|
-|BlockAlign		|2[Byte]	|1ブロックのサイズ				|
-|BitsPerSample	|2[Byte]	|量子化ビット					|
+|フィールド名	|サイズ		|説明							|  
+|:-				|:-			|:-								|  
+|FormatTag		|2[Byte]	|フォーマットタグ. PCMならば1.	|  
+|Channels		|2[Byte]	|チャンネル数					|  
+|SamplesPerSec	|4[Byte]	|サンプリング周波数				|  
+|AvgBytesPerSec	|4[Byte]	|単位時間当たりのサイズ			|  
+|BlockAlign		|2[Byte]	|1ブロックのサイズ				|  
+|BitsPerSample	|2[Byte]	|量子化ビット					|  
 
 C言語の構造体で表すと以下のように定義される。
 
-```
+```C
 struct
 {
   char			m_szID[4];	// 'fmt '
@@ -76,7 +76,7 @@ struct
   struct T_FMT	m_stFmt;	// fmt Chunk.
 };
 
-typedef struct T_FMT
+struct T_FMT
 {
 	short m_wFormatTag;		// フォーマットタグ. PCMならば1.
 	short m_nChannels;		// チャンネル数.
@@ -84,7 +84,7 @@ typedef struct T_FMT
 	long m_nAvgBytesPerSec;	// 単位時間あたりのサイズ.
 	short m_nBlockAlign;	// 1ブロックのサイズ.
 	short m_wBitsPerSample;	// 量子化ビット.
-}T_FMT;
+};
 ```
 
 ## data Chunk
@@ -93,17 +93,17 @@ typedef struct T_FMT
 
 data Chunkの構造を以下に示す。  
 
-|フィールド名	|サイズ		|説明						|
-|:-				|:-			|:-							|
-|Chunk ID		|4[Byte]	|'data'						|
-|Chunk Size		|4[Byte]	|data Chunkのサイズ			|
-|Sample			|n[Byte]	|波形データ(サンプル値) ※	|
+|フィールド名	|サイズ		|説明						|  
+|:-				|:-			|:-							|  
+|Chunk ID		|4[Byte]	|'data'						|  
+|Chunk Size		|4[Byte]	|data Chunkのサイズ			|  
+|Sample			|n[Byte]	|波形データ(サンプル値) ※	|  
 
 ※(量子化ビット/8) \* サンプリング周波数 \* チャンネル数 \* 時間[秒]のバイト数となる.
 
 C言語の構造体で表すと以下のように定義される。
 
-```
+```C
 struct
 {
   char				m_szID[4];	// 'data'

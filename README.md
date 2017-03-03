@@ -1,6 +1,7 @@
 [WaveFormOperator](https://github.com/kantoku009/WaveFormOperator)
 ====================
-#はじめに
+
+# はじめに
 C++言語にてWAVEファイルを読み/書きできるプログラムを作成した。
 
 
@@ -11,7 +12,13 @@ GitHubのリポジトリと全ソースコードのダウンロードは以下UR
 
 ----
 
-#UML
+# WAVEファイル フォーマット
+WAVEファイルの構造を以下ファイルで解説している。  
+[Wave File Format](https://github.com/kantoku009/WaveFormOperator/blob/master/document/WAVE_FORMAT.md)
+
+----
+
+# UML
 クラス図とシーケンス図を作成した。  
 以下からダウンロード可能。  
 
@@ -21,7 +28,7 @@ UMLの作成には無償のUMLモデリングツール[astah community](http://a
 
 ----
 
-#ビルド
+# ビルド
 <dl>
 	<dt><strong>コマンド</strong></dt>
 	<dd>Unix系のOSでビルドするのを想定している。</dd>
@@ -50,10 +57,9 @@ UMLの作成には無償のUMLモデリングツール[astah community](http://a
 
 	test_WaveFormatOperator
 
-#使用方法
+# 使用方法
+WAVEファイルをコピーする為のプログラムを作成した。  
 使用方法は以下を参照。  
 実行すると"out.wav"が出来上がる。
 
 	%./test_WaveFormatOperator [WAVEファイル名]
-
-
