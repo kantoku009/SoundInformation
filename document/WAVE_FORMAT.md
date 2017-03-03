@@ -24,7 +24,7 @@ RIFFファイルはコンテナである為、WAVEファイル以外にも種類
 RIFF Chunkの構造を以下に示す。  
 
 |フィールド名	|サイズ		|説明				|
-|:-				|:-			|:-					|
+|:---			|:---		|:---				|
 |Chunk ID		|4[Byte]	|'RIFF'				|
 |Chunk Size		|4[Byte]	|ファイルサイズ-8	|
 |RIFF Type		|4[Byte]	|'WAVE'				|
@@ -48,7 +48,7 @@ WAVEファイルの種々の情報が格納されているChunk。
 fmt Chunkの構造を以下に示す。  
 
 |フィールド名	|サイズ		|説明								|
-|:-				|:-			|:-									|
+|:---			|:---		|:---								|
 |Chunk ID		|4[Byte]	|'fmt '(最後は空白).				| 
 |Chunk Size		|4[Byte]	|FMTチャンクのサイズ				|
 |FMT Chunk		|n[Byte]	|FMT Chunkを参照. ※				|
@@ -58,7 +58,7 @@ fmt Chunkの構造を以下に示す。
 FMT Chunk.
 
 |フィールド名	|サイズ		|説明							|
-|:-				|:-			|:-								|
+|:---			|:---		|:---							|
 |FormatTag		|2[Byte]	|フォーマットタグ. PCMならば1.	|
 |Channels		|2[Byte]	|チャンネル数					|
 |SamplesPerSec	|4[Byte]	|サンプリング周波数				|
@@ -94,7 +94,7 @@ struct T_FMT
 data Chunkの構造を以下に示す。  
 
 |フィールド名	|サイズ		|説明						|
-|:-				|:-			|:-							|
+|:---			|:---		|:---						|
 |Chunk ID		|4[Byte]	|'data'						|
 |Chunk Size		|4[Byte]	|data Chunkのサイズ			|
 |Sample			|n[Byte]	|波形データ(サンプル値) ※	|
