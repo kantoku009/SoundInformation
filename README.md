@@ -14,7 +14,7 @@ GitHubのリポジトリと全ソースコードのダウンロードは以下UR
 
 # WAVEファイル フォーマット
 WAVEファイルの構造を以下ファイルで解説している。  
-[Wave File Format](https://github.com/kantoku009/WaveFormOperator/blob/master/document/WAVE_FORMAT.md)
+[Wave File Formatの解説](https://github.com/kantoku009/WaveFormOperator/blob/master/document/WAVE_FORMAT.md)
 
 ----
 
