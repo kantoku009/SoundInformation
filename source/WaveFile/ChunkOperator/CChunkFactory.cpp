@@ -31,7 +31,6 @@ BChunkOperator*  CChunkFactory::create(const char* i_szID)
 	BChunkOperator* rgbChunkOperator[] =
 	{
 		&m_cRIFFChunkOperator,
-		&m_cWAVEChunkOperator,
 		&m_cFmtChunkOperator,
 		&m_cDataChunkOperator,
 		&m_cOtherChunkOperator,
@@ -46,3 +45,27 @@ BChunkOperator*  CChunkFactory::create(const char* i_szID)
 	}
 	return &m_cOtherChunkOperator;
 }
+
+/**
+ * チャンクを探す.
+ */
+BChunkOperator* CChunkFactory::search(ifstream& i_cFileStream)
+{
+	char a_szID[4] = "";
+	size_t a_uReaded = 0;
+
+	a_uReaded = i_cFileStream.readsome(a_szID, sizeof(a_szID));
+	if(sizeof(a_szID) != a_uReaded)
+	{
+		return NULL;
+	}
+
+	// chunkID分だけ戻す.
+	for(unsigned short a_ushLoop=0; a_ushLoop<sizeof(a_szID); a_ushLoop++)
+	{
+		i_cFileStream.unget();
+	}
+
+	return this->create(a_szID);
+}
+

@@ -18,15 +18,6 @@ using namespace std;
 #endif
 
 /**
- * @brief	WaveファイルのChunk構造体.
- */
-typedef struct T_CHUNK
-{
-	char m_szID[4];
-	char m_szSize[4];
-}T_CHUNK;
-
-/**
  * @brief	WAVEファイルのChunk.
  */
 class BChunkOperator
@@ -44,18 +35,16 @@ public:
 
 	/**
 	 * @brief	WAVEファイルのChunkを読み込む.
-	 * @param	T_CHUNK& i_stChunk
-	 * @param	CWaveFile& pcWaveFile
 	 * @param	ifstream& i_cFileStream.
+	 * @param	CWaveFile& pcWaveFile
 	 * @return	成功 / 失敗.
 	 */
-	virtual bool read(ifstream& i_cFileStream, CWaveFile& i_pcWaveFile, T_CHUNK& i_stChunk);
+	virtual bool read(ifstream& i_cFileStream, CWaveFile& i_pcWaveFile);
 
 	/**
 	 * @brief	WAVEファイルのChunkを書き込む.
-	 * @param	T_CHUNK& i_stChunk
-	 * @param	CWaveFile& pcWaveFile
 	 * @param	ifstream& i_cFileStream.
+	 * @param	CWaveFile& pcWaveFile
 	 * @return	成功 / 失敗.
 	 */
 	virtual bool write(ofstream& i_cFileStream, CWaveFile& i_pcWaveFile);
@@ -65,7 +54,7 @@ public:
 	 * @param	なし.
 	 * @return	成功 / 失敗.
 	 */
-	virtual const char* getChunkID() const
+	virtual char* getChunkID()
 	{
 		return m_szID;
 	}
@@ -75,19 +64,18 @@ public:
 	 * @param	なし.
 	 * @return	成功 / 失敗.
 	 */
-	virtual long getChunkSize() const
+	virtual long getChunkSize()
 	{
 		return m_lSize;
 	}
 protected:
 	/**
-	 * @brief	T_CHUNKを表示.
+	 * @brief	Chunk情報を表示.
 	 * @param	char* i_pbyMessage	表示したいメッセージ.
-	 * @param	T_CHUNK i_stChunk	表示したいT_CHUNK.
 	 * @return	なし.
 	 * @note	デバッグ用.
 	 */
-	void printChunk(char* i_pbyMessage, T_CHUNK& i_stChunk);
+	void printChunk(char* i_pbyMessage);
 
 	/**
 	 * @brief	Chunk ID.
@@ -98,6 +86,17 @@ protected:
 	 * @brief	Chunk size.
 	 */
 	long m_lSize;
+	
+	/**
+	 * @brief	各Chunk独自の情報.
+	 * @note	各Chunkでサイズが異なる為, ポインタのメモリ確保のみ.
+	 */
+	char* m_szChunkInfo;
+
+	/**
+	 * @brief	Chunk情報を出力するか否か.
+	 */
+	bool m_bIsPrintChunkInfo;
 	
 	/**
 	 * @brief	デバッグフラグ.

@@ -1,10 +1,10 @@
 /**
- * @file	CWAVEChunkOperator.h
- * @brief	WAVEファイルのWAVE Chunkクラス.
+ * @file	CRIFFChunkOperator.h
+ * @brief	WAVEファイルのRIFF Chunkクラス.
  */
 
-#ifndef __CWAVECHUNKOPERATOR_H__
-#define __CWAVECHUNKOPERATOR_H__
+#ifndef __CRIFFCHUNKOPERATOR_H__
+#define __CRIFFCHUNKOPERATOR_H__
 
 #include <fstream>
 using namespace std;
@@ -14,40 +14,43 @@ using namespace std;
 #endif
 
 /**
- * @brief	WAVEファイルのWAVE Chunk.
+ * @brief	WAVEファイルのRIFF Chunk.
  */
-class CWAVEChunkOperator : public BChunkOperator
+class CRIFFChunkOperator : public BChunkOperator
 {
 public:
 	/**
 	 * @brief	コンストラクタ.
 	 */
-	CWAVEChunkOperator();
+	CRIFFChunkOperator();
 	
 	/**
 	 * @brief	デストラクタ.
 	 */
-	virtual ~CWAVEChunkOperator(){ }
+	virtual ~CRIFFChunkOperator(){ }
 
 	/**
 	 * @brief	WAVEファイルのChunkを読み込む.
-	 * @param	T_CHUNK& i_stChunk
-	 * @param	CWaveFile& pcWaveFile
 	 * @param	ifstream& i_cFileStream.
+	* @param	CWaveFile& pcWaveFile
 	 * @return	成功 / 失敗.
 	 */
-	bool read(ifstream& i_cFileStream, CWaveFile& i_pcWaveFile, T_CHUNK& i_stChunk);
+	bool read(ifstream& i_cFileStream, CWaveFile& i_pcWaveFile);
 	
 	/**
 	 * @brief	WAVEファイルのChunkを書き込む.
-	 * @param	T_CHUNK& i_stChunk
-	 * @param	CWaveFile& pcWaveFile
 	 * @param	ifstream& i_cFileStream.
+	* @param	CWaveFile& pcWaveFile
 	 * @return	成功 / 失敗.
 	 */
 	bool write(ofstream& i_cFileStream, CWaveFile& i_pcWaveFile);
+
+private:
+	char m_szType[4];
+
+	static char m_szConstID[5];
 	
 };
 
-#endif	//__CWAVECHUNKOPERATOR_H__
+#endif	//__CRIFFCHUNKOPERATOR_H__
 

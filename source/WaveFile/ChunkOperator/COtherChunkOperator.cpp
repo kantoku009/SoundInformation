@@ -10,6 +10,8 @@ using namespace std;
 #include "COtherChunkOperator.h"
 #endif
 
+#define DEF_CHUNK_ID_OTHER	""
+
 /**
  * コンストラクタ.
  */
@@ -22,9 +24,21 @@ COtherChunkOperator::COtherChunkOperator()
 /**
  * chunkをファイルから読み込み.
  */
-bool  COtherChunkOperator::read(ifstream& i_cFileStream, CWaveFile& i_pcWaveFile, T_CHUNK& i_stChunk)
+bool  COtherChunkOperator::read(ifstream& i_cFileStream, CWaveFile& i_pcWaveFile)
 {
-	return BChunkOperator::read(i_cFileStream, i_pcWaveFile, i_stChunk);
+	bool a_bIsSuccess = true;
+
+	a_bIsSuccess = BChunkOperator::read(i_cFileStream, i_pcWaveFile);
+	if(!a_bIsSuccess)
+	{
+		return false;
+	}
+
+	// Chunkサイズ分だけ読み飛ばす.
+	i_cFileStream.seekg(this->m_lSize,ios::cur);
+	
+	if(m_bIsPrintChunkInfo) printChunk((char*)"Read Chunk");
+	return true;
 }
 
 /**

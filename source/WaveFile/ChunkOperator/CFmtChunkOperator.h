@@ -44,16 +44,14 @@ public:
 
 	/**
 	 * @brief	WAVEファイルのChunkを読み込む.
-	 * @param	T_CHUNK& i_stChunk
 	 * @param	CWaveFile& pcWaveFile
 	 * @param	ifstream& i_cFileStream.
 	 * @return	成功 / 失敗.
 	 */
-	bool read(ifstream& i_cFileStream, CWaveFile& i_pcWaveFile, T_CHUNK& i_stChunk);
+	bool read(ifstream& i_cFileStream, CWaveFile& i_pcWaveFile);
 	
 	/**
 	 * @brief	WAVEファイルのChunkを書き込む.
-	 * @param	T_CHUNK& i_stChunk
 	 * @param	CWaveFile& pcWaveFile
 	 * @param	ifstream& i_cFileStream.
 	 * @return	成功 / 失敗.
@@ -64,11 +62,15 @@ protected:
 	/**
 	 * @brief	TFmtChunkを表示.
 	 * @param	char* i_pbyMessage		表示したいメッセージ.
-	 * @param	TFmtChunk& i_stFmtChunk	表示したいTFmtChunk
 	 * @return	なし.
 	 * @note	デバッグ用.
 	 */
 	void printFmtChunk(char* i_pbyMessage, T_FMT_CHUNK& i_stFmtChunk);
+
+	/**
+	 * @brief	fmt
+	 */
+	T_FMT_CHUNK m_stFmt;
 };
 
 #endif	//__CFMTCHUNKOPERATOR_H__

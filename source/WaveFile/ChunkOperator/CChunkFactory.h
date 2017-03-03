@@ -38,10 +38,6 @@ using namespace std;
 #include "CRIFFChunkOperator.h"
 #endif
 
-#ifndef __CWAVECHUNKOPERATOR_H__
-#include "CWAVEChunkOperator.h"
-#endif
-
 /**
  * @brief	WAVEファイルのChunk.
  */
@@ -60,16 +56,21 @@ public:
 
 	/**
 	 * @brief	WAVEファイルのchunk種を生成.
-	 * @param	T_CHUNK& i_stChunk
 	 * @return	WAVEファイルのchunk種.
 	 */
 	BChunkOperator* create(const char* i_szID);
+
+	/**
+	 * @brief	チャンクを探す.
+	 * @param	ofstream& i_cFileStream
+	 * @return	WAVEファイルのchunk種.
+	 */
+	BChunkOperator* search(ifstream& i_cFileStream);
 
 private:
 	//map<char*, BChunkOperator&>	m_mapChunk;
 
 	CRIFFChunkOperator			m_cRIFFChunkOperator;
-	CWAVEChunkOperator			m_cWAVEChunkOperator;
 	CFmtChunkOperator			m_cFmtChunkOperator;
 	CDataChunkOperator			m_cDataChunkOperator;
 	COtherChunkOperator			m_cOtherChunkOperator;

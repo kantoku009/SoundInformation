@@ -10,26 +10,58 @@ using namespace std;
 #include "CFmtChunkOperator.h"
 #endif
 
+#define DEF_CHUNK_ID_FMT "fmt "
+
 /**
  * コンストラクタ.
  */
 CFmtChunkOperator::CFmtChunkOperator()
 {
 	strncpy(m_szID, "fmt ", 4);
-	m_lSize = 0;
+	m_lSize = sizeof(T_FMT_CHUNK);
+	m_szChunkInfo = (char*)&m_stFmt;
 }
 
 /**
  * fmt chunkをファイルから読み込み.
  */
-bool  CFmtChunkOperator::read(ifstream& i_cFileStream, CWaveFile& i_pcWaveFile, T_CHUNK& i_stChunk)
+bool  CFmtChunkOperator::read(ifstream& i_cFileStream, CWaveFile& i_pcWaveFile)
 {
-	long a_lChunkSize = CWaveFileUtility::convert4ByteDataToLong(i_stChunk.m_szSize);
+	bool a_bIsSuccess = true;
 	
+	a_bIsSuccess = BChunkOperator::read(i_cFileStream, i_pcWaveFile);
+	if(!a_bIsSuccess)
+	{
+		if(m_bIsDEBUG) printf("failed:fmt  chunk do not read.\n");
+		return false;
+	}
+
+	// 自分自身のChunk IDと比較.
+	if( 0 != strncmp(this->m_szID, DEF_CHUNK_ID_FMT, sizeof(this->m_szID)) )
+	{
+		if(m_bIsDEBUG) printf("failed:RIFF read. not chunk.\n");
+		this->m_lSize = 0;
+		return false;
+	}
+
+	// fmt をファイルから読み込み.
 	T_FMT_CHUNK a_stFmt;
 	memset((char*)&a_stFmt, 0x00, sizeof(a_stFmt));
-	i_cFileStream.read((char*)&a_stFmt, a_lChunkSize);
+	size_t a_uReaded = 0;
+	a_uReaded = i_cFileStream.readsome((char*)&a_stFmt, sizeof(a_stFmt));
+	if(sizeof(a_stFmt) != a_uReaded)
+	{
+		if(m_bIsDEBUG) printf("failed:fmt do not read.\n");
+		return false;
+	}
 
+	// fmt Exサイズ分だけ読み飛ばす.
+	long a_lSize = this->m_lSize - sizeof(a_stFmt);
+	if(0 != a_lSize)
+	{
+		i_cFileStream.seekg(a_lSize,ios::cur);
+	}
+	
 	long nSamplesPerSec = CWaveFileUtility::convert4ByteDataToLong(a_stFmt.m_nSamplesPerSec);
 	short wBitsPerSample = CWaveFileUtility::convert2ByteDataToShort(a_stFmt.m_wBitsPerSample);
 	short nChannels = CWaveFileUtility::convert2ByteDataToShort(a_stFmt.m_nChannels);
@@ -38,8 +70,8 @@ bool  CFmtChunkOperator::read(ifstream& i_cFileStream, CWaveFile& i_pcWaveFile, 
 	i_pcWaveFile.setBitsPerSample(wBitsPerSample);
 	i_pcWaveFile.setNumChannels(nChannels);
 
-	if(m_bIsDEBUG) printChunk((char*)"Read Chunk", i_stChunk);
-	if(m_bIsDEBUG) printFmtChunk((char*)"Read fmt", a_stFmt);
+	if(m_bIsPrintChunkInfo) printChunk((char*)"Read Chunk");
+	if(m_bIsPrintChunkInfo) printFmtChunk((char*)"Read fmt", a_stFmt);
 	return true;
 }
 
@@ -48,21 +80,15 @@ bool  CFmtChunkOperator::read(ifstream& i_cFileStream, CWaveFile& i_pcWaveFile, 
  */
 bool CFmtChunkOperator::write(ofstream& i_cFileStream, CWaveFile& i_pcWaveFile)
 {
-	T_CHUNK a_stChunk;
-	memset((char*)&a_stChunk, 0x00, sizeof(a_stChunk));
 	T_FMT_CHUNK a_stFmt;
 	memset((char*)&a_stFmt, 0x00, sizeof(a_stFmt));
 
-	// "fmt "をコピー.
-	strncpy(a_stChunk.m_szID, this->m_szID, sizeof(a_stChunk.m_szID));
-	
-	// "fmt "のサイズを計算.
-	long lFmtSize = sizeof(a_stFmt);
-	CWaveFileUtility::convertLongTo4ByteData(lFmtSize, a_stChunk.m_szSize);
-	
-	// chunkをファイルへ書き込み.
-	i_cFileStream.write((char*)&a_stChunk, sizeof(a_stChunk));
+	// "fmt " Chunk IDをコピー.
+	memcpy(this->m_szID, DEF_CHUNK_ID_FMT, sizeof(this->m_szID));
 
+	// "fmt "のサイズを計算.
+	this->m_lSize = sizeof(a_stFmt);
+	
 	short wFormatTag = 1;
 	CWaveFileUtility::convertShortTo2ByteData(wFormatTag, a_stFmt.m_wFormatTag);
 
@@ -81,11 +107,14 @@ bool CFmtChunkOperator::write(ofstream& i_cFileStream, CWaveFile& i_pcWaveFile)
 	short wBitsPerSample = i_pcWaveFile.getBitsPerSample();
 	CWaveFileUtility::convertShortTo2ByteData(wBitsPerSample, a_stFmt.m_wBitsPerSample);
 
+	// Chunk ID および Chunk Sizeをファイルへ書き込み.
+	BChunkOperator::write(i_cFileStream, i_pcWaveFile);
+
 	// fmt chunkをファイルへ書き込み.
 	i_cFileStream.write((char*)&a_stFmt, sizeof(a_stFmt));
 
-	if(m_bIsDEBUG) printChunk((char*)"Write Chunk", a_stChunk);
-	if(m_bIsDEBUG) printFmtChunk((char*)"Write FMT Chunk", a_stFmt);
+	if(m_bIsPrintChunkInfo) printChunk((char*)"Write Chunk");
+	if(m_bIsPrintChunkInfo) printFmtChunk((char*)"Write FMT Chunk", a_stFmt);
 	return true;
 }
 

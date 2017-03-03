@@ -56,43 +56,39 @@ bool CWaveFile::read(const string i_strFileName)
 	BChunkOperator* a_pbChunk = NULL;
 	bool a_bIsSuccess = true;
 
-	T_CHUNK	a_stChunk;
 	try
 	{
-		//'RIFF'
+		// 'RIFF' (ファイルの先頭はRIFF Chunk).
 		a_pbChunk = a_cChunkFactory.create((char*)"RIFF");
-		a_bIsSuccess = a_pbChunk->read(fp, *this, a_stChunk);
+		a_bIsSuccess = a_pbChunk->read(fp, *this);
 		if(false == a_bIsSuccess)
 		{
-			throw WaveFormatError((char*)"CWaveFile read error: not RIFF chunk."); 
+			throw WaveFormatError(a_pbChunk->getChunkID()); 
 		}
 
-		//'WAVE'
-		a_pbChunk = a_cChunkFactory.create((char*)"WAVE");
-		a_bIsSuccess = a_pbChunk->read(fp, *this, a_stChunk);
-		if(false == a_bIsSuccess)
+		while( !fp.eof() )
 		{
-			throw WaveFormatError((char*)"CWaveFile read error: not WAVE chunk.");
-		}
-
-		while( fp.read((char*)&a_stChunk,sizeof(a_stChunk)) )
-		{
-			a_pbChunk = a_cChunkFactory.create(a_stChunk.m_szID);
-			a_bIsSuccess = a_pbChunk->read(fp, *this, a_stChunk);
+			a_pbChunk = a_cChunkFactory.search(fp);
+			if(NULL == a_pbChunk)
+			{
+				break;
+			}
+			
+			a_bIsSuccess = a_pbChunk->read(fp, *this);
 			if(false == a_bIsSuccess)
 			{
-				char a_szErrorString[256];
-				char a_szChunkID[5];
-				memset(a_szChunkID, 0x00, 5);
-				memcpy(a_szChunkID, a_stChunk.m_szID, 4);
-				sprintf(a_szErrorString, "CWaveFile read error: %s chunk.", a_szChunkID);
-				throw WaveFormatError((char*)a_szErrorString);
+				throw WaveFormatError(a_pbChunk->getChunkID());
 			}
 		}
 	}
 	catch(WaveFormatError err)
 	{
-		cerr << err.what() << endl;
+		char a_szErrorString[256];
+		char a_szChunkID[5];
+		memset(a_szChunkID, 0x00, 5);
+		memcpy(a_szChunkID, err.what(), 4);
+		sprintf(a_szErrorString, "CWaveFile read error: %s chunk.", a_szChunkID);
+		cerr << a_szErrorString << endl;
 		return false;
 	}
    
@@ -104,17 +100,16 @@ bool CWaveFile::read(const string i_strFileName)
  */
 bool CWaveFile::write(const string i_strFileName)
 {
-	ofstream      fp(i_strFileName.c_str(),ios::binary);
+	ofstream	fp(i_strFileName.c_str(),ios::binary);
 	if(!fp)
 	{
 		cerr << "CWaveFile error: do not open" << i_strFileName << endl;
 		return false;
 	}
 
-	const char* a_rgszID[] = 
+	char* a_rgszID[] = 
 	{
 		"RIFF",
-		"WAVE",
 		"fmt ",
 		"data"
 	};
@@ -128,23 +123,23 @@ bool CWaveFile::write(const string i_strFileName)
 		short a_shLoopMax = sizeof(a_rgszID) / sizeof(a_rgszID[0]);
 		for(short a_shIndex=0; a_shIndex < a_shLoopMax; a_shIndex++)
 		{
-			const char* a_pszID = a_rgszID[a_shIndex];
+			char* a_pszID = a_rgszID[a_shIndex];
 			a_pbChunk = a_cChunkFactory.create(a_pszID);
 			a_bIsSuccess = a_pbChunk->write(fp, *this);
 			if(false == a_bIsSuccess)
 			{
-				char a_szErrorString[256];
-				char a_szChunkID[5];
-				memset(a_szChunkID, 0x00, 5);
-				memcpy(a_szChunkID, a_pszID, 4);
-				sprintf(a_szErrorString, "CWaveFile write error: %s chunk.", a_pszID);
-				throw WaveFormatError((char*)a_szErrorString);
+				throw WaveFormatError((char*)a_pszID);
 			}
 		}
 	}
 	catch(WaveFormatError err)
 	{
-		cerr << err.what() << endl;
+		char a_szErrorString[256];
+		char a_szChunkID[5];
+		memset(a_szChunkID, 0x00, 5);
+		memcpy(a_szChunkID, err.what(), 4);
+		sprintf(a_szErrorString, "CWaveFile read error: %s chunk.", a_szChunkID);
+		cerr << a_szErrorString << endl;
 		return false;
 	}
  

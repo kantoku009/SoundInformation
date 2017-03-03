@@ -18,6 +18,8 @@ using namespace std;
 #include "../SampleOperator/ISampleOperator.h"
 #endif
 
+#define DEF_CHUNK_ID_DATA	"data"
+
 /**
  * コンストラクタ.
  */
@@ -30,10 +32,26 @@ CDataChunkOperator::CDataChunkOperator()
 /**
  * data chunkをファイルから読み込み.
  */
-bool  CDataChunkOperator::read(ifstream& i_cFileStream, CWaveFile& i_pcWaveFile, T_CHUNK& i_stChunk)
+bool  CDataChunkOperator::read(ifstream& i_cFileStream, CWaveFile& i_pcWaveFile)
 {
-	long lDataSize = CWaveFileUtility::convert4ByteDataToLong(i_stChunk.m_szSize);
-	i_pcWaveFile.setSamplesPerChannel(lDataSize/i_pcWaveFile.getBlockAlign());
+	bool a_bIsSuccess = true;
+
+	a_bIsSuccess = BChunkOperator::read(i_cFileStream, i_pcWaveFile);
+	if(!a_bIsSuccess)
+	{
+		if(m_bIsDEBUG) printf("failed:data do not read.\n");
+		return false;
+	}
+
+	// 自分自身のChunk IDと比較.
+	if( 0 != strncmp(this->m_szID, DEF_CHUNK_ID_DATA, sizeof(this->m_szID)) )
+	{
+		if(m_bIsDEBUG) printf("failed:RIFF read. not chunk.\n");
+		this->m_lSize = 0;
+		return false;
+	}
+
+	i_pcWaveFile.setSamplesPerChannel(this->m_lSize/i_pcWaveFile.getBlockAlign());
 
 	// 量子化ビットを取得.
 	short a_BitsPerSample = i_pcWaveFile.getBitsPerSample();
@@ -53,7 +71,7 @@ bool  CDataChunkOperator::read(ifstream& i_cFileStream, CWaveFile& i_pcWaveFile,
 		}
 	}
 	
-	if(m_bIsDEBUG) printChunk((char*)"Read Chunk", i_stChunk);
+	if(m_bIsPrintChunkInfo) printChunk((char*)"Read Chunk");
 	return true;
 }
 
@@ -62,19 +80,12 @@ bool  CDataChunkOperator::read(ifstream& i_cFileStream, CWaveFile& i_pcWaveFile,
  */
 bool CDataChunkOperator::write(ofstream& i_cFileStream, CWaveFile& i_pcWaveFile)
 {
-	T_CHUNK a_stChunk;
-	memset((char*)&a_stChunk, 0x00, sizeof(a_stChunk));
+	// "data" Chunk IDをコピー.
+	memcpy(this->m_szID, DEF_CHUNK_ID_DATA, sizeof(this->m_szID));
 
-	// "data"をコピー.
-	strncpy(a_stChunk.m_szID, this->m_szID, sizeof(a_stChunk.m_szID));
-	
 	// "data"のサイズを計算.
-	long lDataSize = i_pcWaveFile.getSamplesPerChannel() * i_pcWaveFile.getBlockAlign();
-	CWaveFileUtility::convertLongTo4ByteData(lDataSize, a_stChunk.m_szSize);
+	this->m_lSize = i_pcWaveFile.getSamplesPerChannel() * i_pcWaveFile.getBlockAlign();
 	
-	// chunkをファイルへ書き込み.
-	i_cFileStream.write((char*)&a_stChunk, sizeof(a_stChunk));
-    
 	// 量子化ビットを取得.
 	short a_BitsPerSample = i_pcWaveFile.getBitsPerSample();
 	
@@ -83,6 +94,9 @@ bool CDataChunkOperator::write(ofstream& i_cFileStream, CWaveFile& i_pcWaveFile)
 	ISampleOperator* a_piSampleOperator;
 	a_piSampleOperator = a_CFactorySampleOperator.create(a_BitsPerSample);
 	
+	// Chunk ID および Chunk Sizeをファイルへ書き込み.
+	BChunkOperator::write(i_cFileStream, i_pcWaveFile);
+
 	// write sample.
 	bool a_bIsWriteSuccess = true;
 	for(long index=0;index<i_pcWaveFile.getSamplesPerChannel();index++)
@@ -96,7 +110,7 @@ bool CDataChunkOperator::write(ofstream& i_cFileStream, CWaveFile& i_pcWaveFile)
 		}
 	}
 
-	if(m_bIsDEBUG) printChunk((char*)"Write Sample Chunk", a_stChunk);
+	if(m_bIsPrintChunkInfo) printChunk((char*)"Write Sample Chunk");
 	return true;
 }
 
