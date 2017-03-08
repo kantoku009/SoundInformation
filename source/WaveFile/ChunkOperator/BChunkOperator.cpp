@@ -19,8 +19,8 @@ BChunkOperator::BChunkOperator()
 	m_lSize = 0;
 	m_szChunkInfo = NULL;
 	
-	m_bIsPrintChunkInfo = true;
-	m_bIsDEBUG = true;
+	m_bIsPrintChunkInfo = false;
+	m_bIsDEBUG = false;
 }
 
 /**

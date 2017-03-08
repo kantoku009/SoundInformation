@@ -107,7 +107,7 @@ bool CWaveFile::write(const string i_strFileName)
 		return false;
 	}
 
-	char* a_rgszID[] = 
+	const char* a_rgszID[] = 
 	{
 		"RIFF",
 		"fmt ",
@@ -123,7 +123,7 @@ bool CWaveFile::write(const string i_strFileName)
 		short a_shLoopMax = sizeof(a_rgszID) / sizeof(a_rgszID[0]);
 		for(short a_shIndex=0; a_shIndex < a_shLoopMax; a_shIndex++)
 		{
-			char* a_pszID = a_rgszID[a_shIndex];
+			const char* a_pszID = a_rgszID[a_shIndex];
 			a_pbChunk = a_cChunkFactory.create(a_pszID);
 			a_bIsSuccess = a_pbChunk->write(fp, *this);
 			if(false == a_bIsSuccess)
