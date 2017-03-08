@@ -40,6 +40,11 @@ struct
 }；
 ```
 
+C++で実装したクラスは以下ファイルを参照。  
+
++ [CRIFFChunkOperator.h](https://github.com/kantoku009/WaveFormOperator/blob/master/source/WaveFile/ChunkOperator/CRIFFChunkOperator.h)
++ [CRIFFChunkOperator.cpp](https://github.com/kantoku009/WaveFormOperator/blob/master/source/WaveFile/ChunkOperator/CRIFFChunkOperator.cpp)
+
 ## fmt  Chunk
 
 WAVEファイルの種々の情報が格納されているChunk。  
@@ -49,7 +54,7 @@ fmt Chunkの構造を以下に示す。
 
 |フィールド名	|サイズ		|説明								|
 |:---			|:---		|:---								|
-|Chunk ID		|4[Byte]	|'fmt '(最後は空白).				| 
+|Chunk ID		|4[Byte]	|'fmt '(最後は空白).				|
 |Chunk Size		|4[Byte]	|FMTチャンクのサイズ				|
 |FMT Chunk		|n[Byte]	|FMT Chunkを参照. ※				|
 
@@ -86,6 +91,9 @@ struct T_FMT
 	short m_wBitsPerSample;	// 量子化ビット.
 };
 ```
+C++で実装したクラスは以下ファイルを参照。  
++ [CFmtChunkOperator.h](https://github.com/kantoku009/WaveFormOperator/blob/master/source/WaveFile/ChunkOperator/CFmtChunkOperator.h)
++ [CFmtChunkOperator.cpp](https://github.com/kantoku009/WaveFormOperator/blob/master/source/WaveFile/ChunkOperator/CFmtChunkOperator.cpp)
 
 ## data Chunk
 
@@ -112,4 +120,7 @@ struct
 };
 ```
 
+C++で実装したクラスは以下ファイルを参照。
 
++ [CDataChunkOperator.h](https://github.com/kantoku009/WaveFormOperator/blob/master/source/WaveFile/ChunkOperator/CDataChunkOperator.h)
++ [CDataChunkOperator.cpp](https://github.com/kantoku009/WaveFormOperator/blob/master/source/WaveFile/ChunkOperator/CDataChunkOperator.cpp)
