@@ -1,0 +1,2 @@
+SRCS_WAVEFORM := \
+	$(SRCS_WAVEFORM_DIR)/BWaveForm.cpp \
