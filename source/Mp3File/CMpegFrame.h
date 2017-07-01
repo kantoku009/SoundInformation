@@ -358,6 +358,14 @@ public:
 	{
 		return (1==this->getChannels())? 17:32;
 	}
+	
+	/**
+	 * @brief	メインデータを設定.
+	 * @param	[in]char* i_pMainData
+	 * @param	[in]long i_lSize
+	 * @return	成功/失敗.
+	 */
+	bool setMainData(char* i_pMainData, long i_lSize);
 
 	/**
 	 * @brief	
@@ -401,7 +409,7 @@ public:
 	{
 		return &m_pGranuleInfo[i_usChannel][i_usGranuleIndex];
 	}
-	
+
 private:
 	/**
 	 * @brief	MPEG Frame Headerの設定（実処理）.
@@ -647,7 +655,7 @@ private:
 	/**
 	 * @brief	メイン情報.
 	 */
-	unsigned char m_pucMainData[2048];
+	unsigned char m_pbyMainData[2048];
 
 	/**
 	 * @brief	メイン情報 データサイズ.

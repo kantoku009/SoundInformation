@@ -48,7 +48,7 @@ void CMpegFrame::init()
 	memset( m_pusScfSi, 0x00, sizeof(m_pusScfSi) );
 	memset( m_pGranuleInfo, 0x00, sizeof(m_pGranuleInfo) );
 
-	memset( m_pucMainData, 0x00, sizeof(m_pucMainData) );
+	memset( m_pbyMainData, 0x00, sizeof(m_pbyMainData) );
 	m_lMainDataSize = 0;
 }
 
@@ -684,6 +684,15 @@ void CMpegFrame::printHeaderInfo()
 bool CMpegFrame::setSideInfo(char* i_bySide)
 {
 	// TBA. 未実装.
+	return true;
+}
+
+/**
+ * メインデータを設定.
+ */
+bool CMpegFrame::setMainData(char* i_pMainData, long i_lSize)
+{
+	memcpy(m_pbyMainData, i_pMainData, i_lSize);
 	return true;
 }
 

@@ -182,7 +182,11 @@ bool CMp3File::readSideInfo(ifstream& i_cFileStream, CMpegFrame& i_cMpegFrame, c
 	i_cFileStream.read(i_pbySide, a_usSideSize);
 
 	// サイド情報を設定.
-	i_cMpegFrame.setSideInfo(i_pbySide);
+	bool a_bIsSuccess = i_cMpegFrame.setSideInfo(i_pbySide);
+	if(true != a_bIsSuccess)
+	{
+		return false;
+	}
 
 	return true;
 }
@@ -204,6 +208,9 @@ bool CMp3File::readMainData(ifstream& i_cFileStream, CMpegFrame& i_cMpegFrame)
 
 	// Mainデータを読み込み.
 	i_cFileStream.read(a_pFrameData, a_lSize);
+
+	// MainデータをFrameに設定.
+	i_cMpegFrame.setMainData(a_pFrameData, a_lSize);
 
 	return true;
 }
