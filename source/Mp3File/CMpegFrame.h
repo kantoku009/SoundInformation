@@ -190,6 +190,16 @@ public:
 	bool setHeader(unsigned long i_ulHeader);
 
 	/**
+	 * @brief	MPEG Frame Header‚ğæ“¾‚·‚é.
+	 * @param	‚È‚µ.
+	 * @return	MPEG Frame Header
+	 */
+	unsigned long getHeader() const
+	{
+		return this->m_ulHeader;
+	}
+
+	/**
 	 * @brief	MPEG Frame ƒTƒCƒY‚ğæ“¾.
 	 * @param	‚È‚µ.
 	 */

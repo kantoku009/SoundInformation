@@ -58,9 +58,27 @@ private:
 	 */
 	bool seekMpegFrame( ifstream& i_cFileStream, CMpegFrame& i_cMpegFrame );
 
+	/**
+	 * @brief
+	 */
 	bool seekMpegFrameAfter(ifstream& i_cFileStream, CMpegFrame& i_cMpegFrame);
+
+	/**
+	 * @brief	CRCを読み込み.
+	 */
 	bool readCRC(ifstream& i_cFileStream, CMpegFrame& i_cMpegFrame);
-	bool readSideInfo(ifstream& i_cFileStream, CMpegFrame& i_cMpegFrame);
+
+	/**
+	 * @brief	サイド情報を読み込み.
+	 * @param	[in]ifstream& i_cFileStream
+	 * @param	[in]CMpegFrame& i_cMpegFrame
+	 * @param	[out]char* i_pbySide
+	 */
+	bool readSideInfo(ifstream& i_cFileStream, CMpegFrame& i_cMpegFrame, char* i_pbySide);
+
+	/**
+	 * @brief	メインデータを読み込み.
+	 */
 	bool readMainData(ifstream& i_cFileStream, CMpegFrame& i_cMpegFrame);
 
 	/**
@@ -74,16 +92,17 @@ private:
 	/**
 	 * @brief	CRCをチェック.
 	 * @param	[in]CMpegFrame& i_cMpegFrame
+	 * @param	[in]unsigned char* i_pbySide
 	 * @return	true:CRC一致 / false:CRC不一致.
 	 */
-	bool checkCRC(CMpegFrame& i_cMpegFrame);
+	bool checkCRC(CMpegFrame& i_cMpegFrame, char* i_pbySide);
 	/**
 	 * @brief	CRCを計算.
-	 * @param	unsigned char* i_pCheckBuf
+	 * @param	unsigned char* i_pbyCheckBuf
 	 * @param	short i_shBytes
 	 * @return	CRC値.
 	 */
-	unsigned short calcCRC(unsigned char* i_pCheckBuf, short i_shBytes);
+	unsigned short calcCRC(unsigned char* i_pbyCheckBuf, short i_shBytes);
 
 
     //BOOL DecodeSideInfo( CBitStream* pbs, CMpegFrame* pmf );

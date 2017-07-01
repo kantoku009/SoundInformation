@@ -1,4 +1,5 @@
 #include <iostream>		//debug用.
+#include <cstring>		//memcpy.
 using namespace std;
 
 #include "CMpegFrame.h"
@@ -118,15 +119,17 @@ bool CMp3File::seekMpegFrameAfter(ifstream& i_cFileStream, CMpegFrame& i_cMpegFr
 	}
 
 	// サイド情報の読み込み.
-	a_bIsSuccess = this->readSideInfo(i_cFileStream, i_cMpegFrame);
+	char a_pbySide[64];
+	a_bIsSuccess = this->readSideInfo(i_cFileStream, i_cMpegFrame, a_pbySide);
 	if(true != a_bIsSuccess)
 	{
 		return false;
 	}
 
 	// CRCチェック.
-	bool a_bIsMatchCRC = this->checkCRC(i_cMpegFrame);
-	if(a_bIsMatchCRC)
+	bool a_bIsMatchCRC = true;
+	a_bIsMatchCRC = this->checkCRC(i_cMpegFrame, a_pbySide);
+	if(!a_bIsMatchCRC)
 	{
 		if(m_bIsDebug) cerr << "CMp3FileError:CRC did not match." << endl;
 		return false;
@@ -162,7 +165,7 @@ bool CMp3File::readCRC(ifstream& i_cFileStream, CMpegFrame& i_cMpegFrame)
 	i_cFileStream.read(a_byBuffer2, sizeof(a_byBuffer2));
 
 	// CRCワードをフレーム情報に設定.
-	a_usCRCCheck = (a_byBuffer2[0]<<8) + a_byBuffer2[1];
+	a_usCRCCheck = ((unsigned char)a_byBuffer2[0]<<8) + (unsigned char)a_byBuffer2[1];
 	i_cMpegFrame.setCRCCheck(a_usCRCCheck);
 
 	return true;
@@ -171,16 +174,15 @@ bool CMp3File::readCRC(ifstream& i_cFileStream, CMpegFrame& i_cMpegFrame)
 /**
  * サイド情報の読み込み.
  */
-bool CMp3File::readSideInfo(ifstream& i_cFileStream, CMpegFrame& i_cMpegFrame)
+bool CMp3File::readSideInfo(ifstream& i_cFileStream, CMpegFrame& i_cMpegFrame, char* i_pbySide)
 {
 	unsigned short a_usSideSize = i_cMpegFrame.getSideSize();
-	char a_bySide[64];
 
 	// サイド情報を読み込み.
-	i_cFileStream.read(a_bySide, a_usSideSize);
+	i_cFileStream.read(i_pbySide, a_usSideSize);
 
 	// サイド情報を設定.
-	i_cMpegFrame.setSideInfo(a_bySide);
+	i_cMpegFrame.setSideInfo(i_pbySide);
 
 	return true;
 }
@@ -209,39 +211,73 @@ bool CMp3File::readMainData(ifstream& i_cFileStream, CMpegFrame& i_cMpegFrame)
 /**
  * CRCをチェック.
  */
-bool CMpegFrame::checkCRC(CMpegFrame& i_cMpegFrame)
+bool CMp3File::checkCRC(CMpegFrame& i_cMpegFrame, char* i_pbySide)
 {
-	// TBA. 未実装.
+	// プロテクションビットが立っていなかったら, 何もしない.
+	if(E_PROTECTION_BIT_TRUE != i_cMpegFrame.getProtectionBit())
+	{
+		return true;
+	}
+
+	unsigned char a_pbyCheckBuf[34];	// Side情報の最大サイズ+2
+
+	// Frame Headerの下位2[byte]をバッファに詰める.
+	unsigned short a_ushHeaderLow = static_cast<unsigned short>((i_cMpegFrame.getHeader() & 0x0000FFFF));
+	memcpy(a_pbyCheckBuf, &a_ushHeaderLow, sizeof(unsigned short));
+	// リトルエンディアンだったら, 上位バイトと下位バイトを入れ替える.
+	unsigned char a_byTemp = a_pbyCheckBuf[0];
+	a_pbyCheckBuf[0] = a_pbyCheckBuf[1];
+	a_pbyCheckBuf[1] = a_byTemp;
+
+	// Side情報をバッファに詰める.
+	unsigned short a_usSideSize = i_cMpegFrame.getSideSize();
+	memcpy(a_pbyCheckBuf+2, i_pbySide, a_usSideSize);
+
+	// CRCを計算.
+	unsigned short a_usCRCValue = this->calcCRC(a_pbyCheckBuf, a_usSideSize+2);
+	if( a_usCRCValue != i_cMpegFrame.getCRCCheck() )
+	{
+		// CRCエラー.
+		if(m_bIsDebug)
+		{
+			printf("CRC error: %02x \t %02x\n", a_usCRCValue, i_cMpegFrame.getCRCCheck());
+			for(int cnt=0; cnt<a_usSideSize+2; cnt++)
+			{
+				printf("%02x ", a_pbyCheckBuf[cnt]);
+			}
+			printf("\n");
+		}
+		return false;
+	}
+
 	return true;
 }
 
 /**
  * CRCを計算.
  */
-unsigned short CMpegFrame::calcCRC( unsigned char* i_pCheckBuf, short i_shBytes )
+unsigned short CMp3File::calcCRC( unsigned char* i_pbyCheckBuf, short i_shBytes )
 {
-	const unsigned int CRC16_POLYNOMIAL = 0x18005;
-	unsigned int crc = 0xffff;
+	const unsigned long CRC16_POLYNOMIAL = 0x18005;
+	unsigned long a_lCRCValue = 0xffff;
 
-	for( int i=0; i<i_shBytes; i++ )
+	for( short a_shLoop=0; a_shLoop<i_shBytes; a_shLoop++ )
 	{
-		unsigned short byte = i_pCheckBuf[i];
-		for( int i=0; i<8; i++ )
+		unsigned short a_usByte = static_cast<unsigned short>(i_pbyCheckBuf[a_shLoop]);
+		for( short a_shCnt=0; a_shCnt<8; a_shCnt++ )
 		{
-			crc <<= 1;
-			byte <<= 1;
-			int nCRCCarry = (crc & 0x10000)!=0;
-			int nDataCarry = (byte & 0x100)!=0;
-			if( (!nCRCCarry && nDataCarry) || (nCRCCarry && !nDataCarry))
+			a_lCRCValue <<= 1;
+			a_usByte <<= 1;
+			short a_shCRCCarry = (a_lCRCValue & 0x10000)!=0;
+			short a_shDataCarry = (a_usByte & 0x100)!=0;
+			if( (!a_shCRCCarry && a_shDataCarry) || (a_shCRCCarry && !a_shDataCarry))
 			{
-				crc ^= CRC16_POLYNOMIAL;
+				a_lCRCValue ^= CRC16_POLYNOMIAL;
 			}
-
-			crc &= 0xffff;
+			a_lCRCValue &= 0xffff;
 		}
 	}
-
-	return (unsigned short)crc;
+	return static_cast<unsigned short>(a_lCRCValue);
 }
 
 /**
